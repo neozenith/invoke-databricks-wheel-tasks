@@ -20,7 +20,7 @@ def lint(c):
     c.run("flake8 .")
 
 
-@task(pre=[format, lint], default=True)
+@task(pre=[format, lint])
 def test(c):
     """Run test suite."""
     c.run("python3 -m pytest")
