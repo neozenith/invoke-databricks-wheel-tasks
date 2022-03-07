@@ -152,4 +152,8 @@ Or feel free to fork this project and rename it to your own variant. It's cool, 
  - [`pyinvoke`](https://pyinvoke.org)
  - [`databricks-cli`](https://docs.databricks.com/dev-tools/cli/index.html)
 
+# Prior Art
+
+ - https://github.com/Smile-SA/invoke-sphinx
+ - https://github.com/Dashlane/dbt-invoke
 
