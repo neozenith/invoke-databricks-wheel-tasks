@@ -69,7 +69,7 @@ Available tasks:
 
   format         Autoformat code for code style.
   build          Build wheel.
-  db.go          Trigger default job associated for this project.
+  db.runjob          Trigger default job associated for this project.
   db.reinstall   Reinstall version of wheel on cluster with a restart.
   db.upload      Upload wheel artifact to DBFS.
 ```
@@ -111,7 +111,7 @@ However if you create an all purpose cluster that you:
  
  This takes roughly 2 minutes which is a much tighter development loop. So these three steps are what `db.reinstall` performs.
 
-### db.go
+### db.runjob
 
 Assuming you have defined a job, that uses a pre-existing cluster, that has your latest wheel installed, this will create a manual trigger of your job with `job-id`.
 
@@ -125,7 +125,7 @@ Then a call to `databricks runs get-output --run-id` happens to retrieve and `er
 Assuming, you created your cluster and job definition you may want to create a root level `@task` like:
 
 ```python
-@task(pre=[build, db.upload, db.reinstall, db.go], default=True)
+@task(pre=[build, db.upload, db.reinstall, db.runjob], default=True)
 def dev(c):
   """Default development loop."""
   ...

@@ -144,6 +144,17 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "invoke-common-tasks"
+version = "0.1.1"
+description = "Some common tasks for PyInvoke to bootstrap your code quality and testing workflows."
+category = "dev"
+optional = false
+python-versions = ">=3.8,<4.0"
+
+[package.dependencies]
+invoke = ">=1.6.0,<2.0.0"
+
+[[package]]
 name = "isort"
 version = "5.10.1"
 description = "A Python utility / library to sort Python imports."
@@ -363,7 +374,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "f8499b648eef1dafa6d84622e6ef671c39bc60c9c3d47592b13feecb28db9ebf"
+content-hash = "ca20c4cd91b7a0555a1167793f9033d81df648731e43e550f1df88e24ef9fe20"
 
 [metadata.files]
 atomicwrites = [
@@ -439,6 +450,10 @@ invoke = [
     {file = "invoke-1.6.0-py2-none-any.whl", hash = "sha256:e6c9917a1e3e73e7ea91fdf82d5f151ccfe85bf30cc65cdb892444c02dbb5f74"},
     {file = "invoke-1.6.0-py3-none-any.whl", hash = "sha256:769e90caeb1bd07d484821732f931f1ad8916a38e3f3e618644687fc09cb6317"},
     {file = "invoke-1.6.0.tar.gz", hash = "sha256:374d1e2ecf78981da94bfaf95366216aaec27c2d6a7b7d5818d92da55aa258d3"},
+]
+invoke-common-tasks = [
+    {file = "invoke-common-tasks-0.1.1.tar.gz", hash = "sha256:cd57d21362259291a0d112c1d95ac82f4c12a2fd6c64a6055c7bcb7ef117f6ad"},
+    {file = "invoke_common_tasks-0.1.1-py3-none-any.whl", hash = "sha256:b4fee96c5746c11b76e209b866a8782cfb16c2151acaff34188631127c70d30a"},
 ]
 isort = [
     {file = "isort-5.10.1-py3-none-any.whl", hash = "sha256:6f62d78e2f89b4500b080fe3a81690850cd254227f27f75c3a0c491a1f351ba7"},

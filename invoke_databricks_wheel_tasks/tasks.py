@@ -41,7 +41,7 @@ def reinstall(c, profile=None, cluster_id=None, wheel=None):
 
 
 @task
-def go(c, profile=None, job_id=None):
+def runjob(c, profile=None, job_id=None):
     """Trigger default job associated for this project."""
     profile = check_conf(c, profile, "databricks.profile")
     job_id = check_conf(c, job_id, "databricks.job-id")
