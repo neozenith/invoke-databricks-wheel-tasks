@@ -1,21 +1,22 @@
 # Standard Library
 import json
 import time
-from functools import cache
+from functools import lru_cache
 from pprint import pprint as pp
 
+# Third Party
 from invoke import run
 
 POLL_DELAY = 5
 
 
-@cache
+@lru_cache(maxsize=None)
 def git_current_branch():
     """Get the current git branch."""
     return run("git branch --show-current", hide=True).stdout.strip()
 
 
-@cache
+@lru_cache(maxsize=None)
 def poetry_project():
     """Get an instance of the current Poetry project.
 
@@ -31,19 +32,19 @@ def poetry_project():
     return poetry
 
 
-@cache
+@lru_cache(maxsize=None)
 def poetry_project_name():
     """Get the name of the current Poerty project."""
     return poetry_project().pyproject.poetry_config["name"]
 
 
-@cache
+@lru_cache(maxsize=None)
 def poetry_project_version():
     """Get the version of the current Poerty project."""
     return poetry_project().pyproject.poetry_config["version"]
 
 
-@cache
+@lru_cache(maxsize=None)
 def poetry_wheel_builder():
     """Get poetry WheelBuilder instance."""
     # Third Party
@@ -53,20 +54,20 @@ def poetry_wheel_builder():
     return builder
 
 
-@cache
+@lru_cache(maxsize=None)
 def poetry_wheelname():
     """Get poetry properly formatted wheelname from WheelBuilder instance."""
     builder = poetry_wheel_builder()
     return builder.wheel_filename
 
 
-@cache
+@lru_cache(maxsize=None)
 def default_dbfs_artifact_path():
     """Helper to construct a default artifact path to upload to in DBFS."""
     return f"dbfs:/FileStore/wheels/{poetry_project_name()}/{git_current_branch()}/"
 
 
-@cache
+@lru_cache(maxsize=None)
 def default_dbfs_wheel_path():
     """Helper to construct a default artifact path to upload to in DBFS."""
     return f"{default_dbfs_artifact_path()}{poetry_wheelname()}"

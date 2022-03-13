@@ -6,11 +6,11 @@ from invoke import task
 
 from .utils import (
     check_conf,
+    default_dbfs_artifact_path,
+    default_dbfs_wheel_path,
     wait_for_cluster_status,
     wait_for_library_status,
     wait_for_run_status,
-    default_dbfs_artifact_path,
-    default_dbfs_wheel_path,
 )
 
 POLL_DELAY = 5
