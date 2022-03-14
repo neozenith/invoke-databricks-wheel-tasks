@@ -139,13 +139,24 @@ You will notice a few things here:
 
 How cool is that?
 
+
 # Contributing
 
-Open an issue and lets have a chat to triage needs or concerns before you sink too much effort on a PR.
+At all times, you have the power to fork this project, make changes as you see fit and then:
 
-Or if you're pretty confident your change is inline with the direction of this project then go ahead and open that PR.
+```sh
+pip install https://github.com/user/repository/archive/branch.zip
+```
+[Stackoverflow: pip install from github branch](https://stackoverflow.com/a/24811490/622276)
 
-Or feel free to fork this project and rename it to your own variant. It's cool, I don't mind.
+That way you can run from your own custom fork in the interim or even in-house your work and simply use this project as a starting point. That is totally ok.
+
+However if you would like to contribute your changes back, then open a Pull Request "across forks".
+
+Once your changes are merged and published you can revert to the canonical version of `pip install`ing this package.
+
+If you're not sure how to make changes or if you should sink the time and effort, then open an Issue instead and we can have a chat to triage the issue.
+
 
 # Resources
 
