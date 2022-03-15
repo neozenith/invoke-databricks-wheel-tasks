@@ -1,6 +1,6 @@
 # Third Party
 from invoke import task
-from invoke_common_tasks import build, ci, format, lint, test  # noqa
+from invoke_common_tasks import build, ci, format, lint, test, typecheck  # noqa
 
 # Our Libraries
 from invoke_databricks_wheel_tasks import reinstall, runjob, upload  # noqa

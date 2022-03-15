@@ -4,7 +4,7 @@ import json
 # Third Party
 from invoke import task
 
-from .utils import (
+from .utils.databricks import (
     check_conf,
     default_dbfs_artifact_path,
     default_dbfs_wheel_path,
