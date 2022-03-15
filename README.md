@@ -72,6 +72,7 @@ Available tasks:
   db.runjob          Trigger default job associated for this project.
   db.reinstall   Reinstall version of wheel on cluster with a restart.
   db.upload      Upload wheel artifact to DBFS.
+  db.clean       Clean wheel artifact from DBFS.
 ```
 
 ### Invoke Configuration
@@ -95,10 +96,14 @@ databricks:
 
 ### db.upload
 
-This tasks will use `dbfs` to empty the upload path and then copy the built wheel from `dist/`.
+This task will use `dbfs` to empty the upload path and then copy the built wheel from `dist/`.
 This project assumes you're using `poetry` or your wheel build output is located in `dist/`.
 
 If you have other requirements then _pull requests welcome_.
+
+### db.clean
+
+This tasks will clean up all items on the target `--artifact-path`.
 
 ### db.reinstall
 

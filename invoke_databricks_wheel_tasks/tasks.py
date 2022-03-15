@@ -30,6 +30,17 @@ def upload(c, profile=None, artifact_path=None):
 
 
 @task
+def clean(c, profile=None, artifact_path=None):
+    """Clean wheel artifact from DBFS."""
+    profile = check_conf(c, profile, "databricks.profile")
+    artifact_path = (
+        check_conf(c, artifact_path, "databricks.artifact-path", should_raise=False) or default_dbfs_artifact_path()
+    )
+
+    c.run(f"dbfs --profile {profile} rm -r {artifact_path}")
+
+
+@task
 def reinstall(c, profile=None, cluster_id=None, wheel=None):
     """Reinstall version of wheel on cluster with a restart."""
     profile = check_conf(c, profile, "databricks.profile")
