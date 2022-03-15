@@ -24,6 +24,7 @@ def upload(c, profile=None, artifact_path=None):
         check_conf(c, artifact_path, "databricks.artifact-path", should_raise=False) or default_dbfs_artifact_path()
     )
 
+    print(f"Deleting from '{artifact_path}' recursively...")
     c.run(f"dbfs --profile {profile} rm -r {artifact_path}")
     c.run(f"dbfs --profile {profile} cp -r dist/ {artifact_path}")
     c.run(f"dbfs --profile {profile} ls {artifact_path}")
@@ -37,6 +38,7 @@ def clean(c, profile=None, artifact_path=None):
         check_conf(c, artifact_path, "databricks.artifact-path", should_raise=False) or default_dbfs_artifact_path()
     )
 
+    print(f"Deleting from '{artifact_path}' recursively...")
     c.run(f"dbfs --profile {profile} rm -r {artifact_path}")
 
 
