@@ -3,6 +3,10 @@ import json
 import time
 from functools import lru_cache
 from pprint import pprint as pp
+from typing import Optional, Union
+
+# Third Party
+import invoke
 
 from .git import git_current_branch
 from .poetry import poetry_project_name, poetry_wheelname
@@ -11,18 +15,24 @@ POLL_DELAY = 5
 
 
 @lru_cache(maxsize=None)
-def default_dbfs_artifact_path():
+def default_dbfs_artifact_path() -> str:
     """Helper to construct a default artifact path to upload to in DBFS."""
     return f"dbfs:/FileStore/wheels/{poetry_project_name()}/{git_current_branch()}/"
 
 
 @lru_cache(maxsize=None)
-def default_dbfs_wheel_path():
+def default_dbfs_wheel_path() -> str:
     """Helper to construct a default artifact path to upload to in DBFS."""
     return f"{default_dbfs_artifact_path()}{poetry_wheelname()}"
 
 
-def wait_for_cluster_status(c, profile, cluster_id, target_status=["RUNNING"], failure_status=[]):
+def wait_for_cluster_status(
+    c: invoke.Context,
+    profile: Optional[str],
+    cluster_id: Optional[str],
+    target_status: list[str] = ["RUNNING"],
+    failure_status: list[str] = [],
+) -> None:
     """Poll cluster status until in desired state."""
     current_status = None
     while current_status not in target_status:
@@ -38,7 +48,14 @@ def wait_for_cluster_status(c, profile, cluster_id, target_status=["RUNNING"], f
         time.sleep(POLL_DELAY)
 
 
-def wait_for_library_status(c, profile, cluster_id, wheel, target_status=["INSTALLED"], failure_status=[]):
+def wait_for_library_status(
+    c: invoke.Context,
+    profile: Optional[str],
+    cluster_id: Optional[str],
+    wheel: Optional[str],
+    target_status: list[str] = ["INSTALLED"],
+    failure_status: list[str] = [],
+) -> None:
     """Poll library statuses until target library in desired state."""
     current_status = None
     while current_status not in target_status:
@@ -55,11 +72,17 @@ def wait_for_library_status(c, profile, cluster_id, wheel, target_status=["INSTA
         time.sleep(POLL_DELAY)
 
 
-def wait_for_run_status(c, profile, run_id, target_status=["TERMINATED"], failure_status=["INTERNAL_ERROR"]):
+def wait_for_run_status(
+    c: invoke.Context,
+    profile: Optional[str],
+    run_id: Optional[str],
+    target_status: list[str] = ["TERMINATED"],
+    failure_status: list[str] = ["INTERNAL_ERROR"],
+) -> None:
     """Poll run status until in desired state."""
     current_status = None
     url = None
-    run_status = None
+    run_status = {}
     while current_status not in target_status:
         result = c.run(f"databricks --profile {profile} runs get --run-id {run_id}", hide=True)
         run_status = json.loads(result.stdout)
@@ -85,7 +108,9 @@ def wait_for_run_status(c, profile, run_id, target_status=["TERMINATED"], failur
             print("\n".join(output[k].split("\\n")))
 
 
-def check_conf(c, value, conf_key, should_raise=True):
+def check_conf(
+    c: invoke.Context, value: Optional[str], conf_key: str, should_raise: bool = True
+) -> Optional[Union[invoke.Context, str]]:
     """Ensure a value is provided from CLI flag value or config."""
     if value is not None:
         return value
