@@ -159,7 +159,7 @@ python-versions = "*"
 
 [[package]]
 name = "invoke-common-tasks"
-version = "0.2.1"
+version = "0.2.2"
 description = "Some common tasks for PyInvoke to bootstrap your code quality and testing workflows."
 category = "dev"
 optional = false
@@ -167,6 +167,7 @@ python-versions = ">=3.8,<4.0"
 
 [package.dependencies]
 invoke = ">=1.6.0,<2.0.0"
+poetry-core = ">=1.0.8,<2.0.0"
 types-invoke = ">=1.6.2,<2.0.0"
 
 [[package]]
@@ -424,14 +425,14 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "urllib3"
-version = "1.26.8"
+version = "1.26.9"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4"
 
 [package.extras]
-brotli = ["brotlipy (>=0.6.0)"]
+brotli = ["brotlicffi (>=0.8.0)", "brotli (>=1.0.9)", "brotlipy (>=0.6.0)"]
 secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "certifi", "ipaddress"]
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
@@ -559,8 +560,8 @@ invoke = [
     {file = "invoke-1.6.0.tar.gz", hash = "sha256:374d1e2ecf78981da94bfaf95366216aaec27c2d6a7b7d5818d92da55aa258d3"},
 ]
 invoke-common-tasks = [
-    {file = "invoke-common-tasks-0.2.1.tar.gz", hash = "sha256:14741d0b88bc02cca586405a94cb438faeeede5d2cdb5eec568fcb21c315e445"},
-    {file = "invoke_common_tasks-0.2.1-py3-none-any.whl", hash = "sha256:8d66abad9d90fa70b8ad6ec1e1499caf6b96613e386ec05d423dd88ef65539ff"},
+    {file = "invoke-common-tasks-0.2.2.tar.gz", hash = "sha256:6111c02453265d927e69a190872c88fd8115cbb695fd83717b484ee44329edb3"},
+    {file = "invoke_common_tasks-0.2.2-py3-none-any.whl", hash = "sha256:dd374e53b046188ec1c38967424100cfaa7eb5ed31ad720a71b414ada4de1dcd"},
 ]
 isort = [
     {file = "isort-5.10.1-py3-none-any.whl", hash = "sha256:6f62d78e2f89b4500b080fe3a81690850cd254227f27f75c3a0c491a1f351ba7"},
@@ -676,6 +677,6 @@ typing-extensions = [
     {file = "typing_extensions-4.1.1.tar.gz", hash = "sha256:1a9462dcc3347a79b1f1c0271fbe79e844580bb598bafa1ed208b94da3cdcd42"},
 ]
 urllib3 = [
-    {file = "urllib3-1.26.8-py2.py3-none-any.whl", hash = "sha256:000ca7f471a233c2251c6c7023ee85305721bfdf18621ebff4fd17a8653427ed"},
-    {file = "urllib3-1.26.8.tar.gz", hash = "sha256:0e7c33d9a63e7ddfcb86780aac87befc2fbddf46c58dbb487e0855f7ceec283c"},
+    {file = "urllib3-1.26.9-py2.py3-none-any.whl", hash = "sha256:44ece4d53fb1706f667c9bd1c648f5469a2ec925fcf3a776667042d645472c14"},
+    {file = "urllib3-1.26.9.tar.gz", hash = "sha256:aabaf16477806a5e1dd19aa41f8c2b7950dd3c746362d7e3223dbe6de6ac448e"},
 ]
