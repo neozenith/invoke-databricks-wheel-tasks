@@ -3,7 +3,7 @@ import json
 import time
 from functools import lru_cache
 from pprint import pprint as pp
-from typing import Optional, Union, List
+from typing import List, Optional, Union
 
 # Third Party
 import invoke
