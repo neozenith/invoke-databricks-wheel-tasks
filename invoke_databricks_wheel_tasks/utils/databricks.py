@@ -3,7 +3,7 @@ import json
 import time
 from functools import lru_cache
 from pprint import pprint as pp
-from typing import Optional, Union
+from typing import Optional, Union, List
 
 # Third Party
 import invoke
@@ -30,8 +30,8 @@ def wait_for_cluster_status(
     c: invoke.Context,
     profile: Optional[str],
     cluster_id: Optional[str],
-    target_status: list[str] = ["RUNNING"],
-    failure_status: list[str] = [],
+    target_status: List[str] = ["RUNNING"],
+    failure_status: List[str] = [],
 ) -> None:
     """Poll cluster status until in desired state."""
     current_status = None
@@ -53,8 +53,8 @@ def wait_for_library_status(
     profile: Optional[str],
     cluster_id: Optional[str],
     wheel: Optional[str],
-    target_status: list[str] = ["INSTALLED"],
-    failure_status: list[str] = [],
+    target_status: List[str] = ["INSTALLED"],
+    failure_status: List[str] = [],
 ) -> None:
     """Poll library statuses until target library in desired state."""
     current_status = None
@@ -76,8 +76,8 @@ def wait_for_run_status(
     c: invoke.Context,
     profile: Optional[str],
     run_id: Optional[str],
-    target_status: list[str] = ["TERMINATED"],
-    failure_status: list[str] = ["INTERNAL_ERROR"],
+    target_status: List[str] = ["TERMINATED"],
+    failure_status: List[str] = ["INTERNAL_ERROR"],
 ) -> None:
     """Poll run status until in desired state."""
     current_status = None
