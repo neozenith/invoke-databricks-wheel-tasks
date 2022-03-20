@@ -151,7 +151,7 @@ python-versions = "*"
 
 [[package]]
 name = "invoke"
-version = "1.6.0"
+version = "1.7.0"
 description = "Pythonic task execution"
 category = "main"
 optional = false
@@ -159,7 +159,7 @@ python-versions = "*"
 
 [[package]]
 name = "invoke-common-tasks"
-version = "0.2.2"
+version = "0.2.3"
 description = "Some common tasks for PyInvoke to bootstrap your code quality and testing workflows."
 category = "dev"
 optional = false
@@ -320,7 +320,7 @@ diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
 name = "pytest"
-version = "7.1.0"
+version = "7.1.1"
 description = "pytest: simple powerful testing with Python"
 category = "dev"
 optional = false
@@ -409,7 +409,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "types-invoke"
-version = "1.6.2"
+version = "1.6.3"
 description = "Typing stubs for invoke"
 category = "dev"
 optional = false
@@ -555,13 +555,12 @@ iniconfig = [
     {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
 ]
 invoke = [
-    {file = "invoke-1.6.0-py2-none-any.whl", hash = "sha256:e6c9917a1e3e73e7ea91fdf82d5f151ccfe85bf30cc65cdb892444c02dbb5f74"},
-    {file = "invoke-1.6.0-py3-none-any.whl", hash = "sha256:769e90caeb1bd07d484821732f931f1ad8916a38e3f3e618644687fc09cb6317"},
-    {file = "invoke-1.6.0.tar.gz", hash = "sha256:374d1e2ecf78981da94bfaf95366216aaec27c2d6a7b7d5818d92da55aa258d3"},
+    {file = "invoke-1.7.0-py3-none-any.whl", hash = "sha256:a5159fc63dba6ca2a87a1e33d282b99cea69711b03c64a35bb4e1c53c6c4afa0"},
+    {file = "invoke-1.7.0.tar.gz", hash = "sha256:e332e49de40463f2016315f51df42313855772be86435686156bc18f45b5cc6c"},
 ]
 invoke-common-tasks = [
-    {file = "invoke-common-tasks-0.2.2.tar.gz", hash = "sha256:6111c02453265d927e69a190872c88fd8115cbb695fd83717b484ee44329edb3"},
-    {file = "invoke_common_tasks-0.2.2-py3-none-any.whl", hash = "sha256:dd374e53b046188ec1c38967424100cfaa7eb5ed31ad720a71b414ada4de1dcd"},
+    {file = "invoke-common-tasks-0.2.3.tar.gz", hash = "sha256:948e6cb827218bbd99274bd1ce1d3246623f09f40cfd86208b6f55550540222d"},
+    {file = "invoke_common_tasks-0.2.3-py3-none-any.whl", hash = "sha256:f823413a10ab9d0f6a9be3644424d9959e7b0cb55540bdfec1e2f7ddd91f6f18"},
 ]
 isort = [
     {file = "isort-5.10.1-py3-none-any.whl", hash = "sha256:6f62d78e2f89b4500b080fe3a81690850cd254227f27f75c3a0c491a1f351ba7"},
@@ -641,8 +640,8 @@ pyparsing = [
     {file = "pyparsing-3.0.7.tar.gz", hash = "sha256:18ee9022775d270c55187733956460083db60b37d0d0fb357445f3094eed3eea"},
 ]
 pytest = [
-    {file = "pytest-7.1.0-py3-none-any.whl", hash = "sha256:b555252a95bbb2a37a97b5ac2eb050c436f7989993565f5e0c9128fcaacadd0e"},
-    {file = "pytest-7.1.0.tar.gz", hash = "sha256:f1089d218cfcc63a212c42896f1b7fbf096874d045e1988186861a1a87d27b47"},
+    {file = "pytest-7.1.1-py3-none-any.whl", hash = "sha256:92f723789a8fdd7180b6b06483874feca4c48a5c76968e03bb3e7f806a1869ea"},
+    {file = "pytest-7.1.1.tar.gz", hash = "sha256:841132caef6b1ad17a9afde46dc4f6cfa59a05f9555aae5151f73bdf2820ca63"},
 ]
 pytest-cov = [
     {file = "pytest-cov-3.0.0.tar.gz", hash = "sha256:e7f0f5b1617d2210a2cabc266dfe2f4c75a8d32fb89eafb7ad9d06f6d076d470"},
@@ -669,8 +668,8 @@ tomli = [
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
 ]
 types-invoke = [
-    {file = "types-invoke-1.6.2.tar.gz", hash = "sha256:a058b590d6ca453114e581e13520dbc5856e42cfae9859c75561b1c66ecfb467"},
-    {file = "types_invoke-1.6.2-py3-none-any.whl", hash = "sha256:8b86b5d1385d2610811d0fe873a02cb7bfc884f20b3768bc4a85f5beccf8fbaa"},
+    {file = "types-invoke-1.6.3.tar.gz", hash = "sha256:d0b9ad5166aa1f2d48da2d1e66471b907885e9a534143fb0dfdd647ed94b84cf"},
+    {file = "types_invoke-1.6.3-py3-none-any.whl", hash = "sha256:a37aea10b82a4255d21371b1a87900723a5ee3af930d0dc82a765c5fc9c54a62"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.1.1-py3-none-any.whl", hash = "sha256:21c85e0fe4b9a155d0799430b0ad741cdce7e359660ccbd8b530613e8df88ce2"},
