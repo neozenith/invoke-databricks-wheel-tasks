@@ -24,9 +24,9 @@ POLL_DELAY = 5
 def upload(c, profile=None, artifact_path=None, branch_name=None):
     """Upload wheel artifact to DBFS."""
     profile = check_conf(c, profile, "databricks.profile")
-    artifact_path = (
-        check_conf(c, artifact_path, "databricks.artifact-path", should_raise=False) or default_dbfs_artifact_path(branch_name)
-    )
+    artifact_path = check_conf(
+        c, artifact_path, "databricks.artifact-path", should_raise=False
+    ) or default_dbfs_artifact_path(branch_name)
 
     print(f"Deleting from '{artifact_path}' recursively...")
     c.run(f"dbfs --profile {profile} rm -r {artifact_path}")
@@ -38,9 +38,9 @@ def upload(c, profile=None, artifact_path=None, branch_name=None):
 def clean(c, profile=None, artifact_path=None, branch_name=None):
     """Clean wheel artifact from DBFS."""
     profile = check_conf(c, profile, "databricks.profile")
-    artifact_path = (
-        check_conf(c, artifact_path, "databricks.artifact-path", should_raise=False) or default_dbfs_artifact_path(branch_name)
-    )
+    artifact_path = check_conf(
+        c, artifact_path, "databricks.artifact-path", should_raise=False
+    ) or default_dbfs_artifact_path(branch_name)
 
     print(f"Deleting from '{artifact_path}' recursively...")
     c.run(f"dbfs --profile {profile} rm -r {artifact_path}")

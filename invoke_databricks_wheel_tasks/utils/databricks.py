@@ -18,7 +18,7 @@ POLL_DELAY = 5
 def default_dbfs_artifact_path(branch_name: Optional[str] = None) -> str:
     """Helper to construct a default artifact path to upload to in DBFS."""
     if branch_name is None:
-        branch_name = git_current_branch() 
+        branch_name = git_current_branch()
     return f"dbfs:/FileStore/wheels/{poetry_project_name()}/{branch_name}/"
 
 
