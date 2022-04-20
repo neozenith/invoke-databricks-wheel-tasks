@@ -15,15 +15,17 @@ POLL_DELAY = 5
 
 
 @lru_cache(maxsize=None)
-def default_dbfs_artifact_path() -> str:
+def default_dbfs_artifact_path(branch_name: Optional[str] = None) -> str:
     """Helper to construct a default artifact path to upload to in DBFS."""
-    return f"dbfs:/FileStore/wheels/{poetry_project_name()}/{git_current_branch()}/"
+    if branch_name is None:
+        branch_name = git_current_branch() 
+    return f"dbfs:/FileStore/wheels/{poetry_project_name()}/{branch_name}/"
 
 
 @lru_cache(maxsize=None)
-def default_dbfs_wheel_path() -> str:
+def default_dbfs_wheel_path(branch_name: Optional[str] = None) -> str:
     """Helper to construct a default artifact path to upload to in DBFS."""
-    return f"{default_dbfs_artifact_path()}{poetry_wheelname()}"
+    return f"{default_dbfs_artifact_path(branch_name)}{poetry_wheelname()}"
 
 
 def wait_for_cluster_status(

@@ -21,11 +21,11 @@ POLL_DELAY = 5
 
 
 @task
-def upload(c, profile=None, artifact_path=None):
+def upload(c, profile=None, artifact_path=None, branch_name=None):
     """Upload wheel artifact to DBFS."""
     profile = check_conf(c, profile, "databricks.profile")
     artifact_path = (
-        check_conf(c, artifact_path, "databricks.artifact-path", should_raise=False) or default_dbfs_artifact_path()
+        check_conf(c, artifact_path, "databricks.artifact-path", should_raise=False) or default_dbfs_artifact_path(branch_name)
     )
 
     print(f"Deleting from '{artifact_path}' recursively...")
@@ -35,11 +35,11 @@ def upload(c, profile=None, artifact_path=None):
 
 
 @task
-def clean(c, profile=None, artifact_path=None):
+def clean(c, profile=None, artifact_path=None, branch_name=None):
     """Clean wheel artifact from DBFS."""
     profile = check_conf(c, profile, "databricks.profile")
     artifact_path = (
-        check_conf(c, artifact_path, "databricks.artifact-path", should_raise=False) or default_dbfs_artifact_path()
+        check_conf(c, artifact_path, "databricks.artifact-path", should_raise=False) or default_dbfs_artifact_path(branch_name)
     )
 
     print(f"Deleting from '{artifact_path}' recursively...")
@@ -47,11 +47,11 @@ def clean(c, profile=None, artifact_path=None):
 
 
 @task
-def reinstall(c, profile=None, cluster_id=None, wheel=None):
+def reinstall(c, profile=None, cluster_id=None, wheel=None, branch_name=None):
     """Reinstall version of wheel on cluster with a restart."""
     profile = check_conf(c, profile, "databricks.profile")
     cluster_id = check_conf(c, cluster_id, "databricks.cluster-id")
-    wheel = check_conf(c, wheel, "databricks.wheel", should_raise=False) or default_dbfs_wheel_path()
+    wheel = check_conf(c, wheel, "databricks.wheel", should_raise=False) or default_dbfs_wheel_path(branch_name)
 
     print(wheel)
 
