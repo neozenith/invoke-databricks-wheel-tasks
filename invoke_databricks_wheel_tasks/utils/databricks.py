@@ -1,9 +1,10 @@
 # Standard Library
 import json
+import os
 import time
 from functools import lru_cache
 from pprint import pprint as pp
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 # Third Party
 import invoke
@@ -28,12 +29,56 @@ def default_dbfs_wheel_path(branch_name: Optional[str] = None) -> str:
     return f"{default_dbfs_artifact_path(branch_name)}{poetry_wheelname()}"
 
 
+def list_jobs(profile: Optional[str] = None) -> Dict[str, str]:
+    """List Jobs from databricks workspace.
+
+    Returns a dictionary with job names as keys and job IDs as values.
+    """
+    result = invoke.run(f"databricks --profile {profile} jobs list --output JSON", hide=True)
+    run_status = json.loads(result.stdout)
+    jobs = {e["settings"]["name"]: e["job_id"] for e in run_status["jobs"]}
+    return jobs
+
+
+def create_or_reset_job(
+    json_payload: Dict[str, Any], profile: Optional[str] = None, job_id: Optional[str] = None
+) -> Any:
+    """Create or Reset a Databricks Job definition.
+
+    - Takes a parsed JSON payload dictionary,
+    - Encodes it into a temporary JSON file
+    - Runs the `create` or `reset` command depending on the presence of `job_id`
+    - cleans up temporary file
+    - returns response
+
+    Payload must comply with:
+    https://docs.databricks.com/dev-tools/api/latest/jobs.html#
+    """
+    json_filename = "temp_job_file.json"
+    if os.path.exists(json_filename):
+        os.remove(json_filename)
+
+    with open(json_filename, "w") as f:
+        json.dump(json_payload, f)
+
+    if job_id:
+        result = invoke.run(f"databricks --profile {profile} jobs reset --job-id {job_id} --json-file {json_filename}")
+    else:
+        result = invoke.run(f"databricks --profile {profile} jobs create --json-file {json_filename}")
+
+    os.remove(json_filename)
+    return result.stdout
+
+
 def wait_for_cluster_status(
     c: invoke.Context,
     profile: Optional[str],
     cluster_id: Optional[str],
     target_status: List[str] = ["RUNNING"],
-    failure_status: List[str] = [],
+    failure_status: List[str] = [
+        "ERROR",
+        "UNKNOWN",
+    ],  # https://docs.databricks.com/dev-tools/api/latest/clusters.html#clusterstate
 ) -> None:
     """Poll cluster status until in desired state."""
     current_status = None
@@ -56,7 +101,11 @@ def wait_for_library_status(
     cluster_id: Optional[str],
     wheel: Optional[str],
     target_status: List[str] = ["INSTALLED"],
-    failure_status: List[str] = [],
+    failure_status: List[str] = [
+        "UNINSTALL_ON_RESTART",
+        "FAILED",
+        "SKIPPED",
+    ],  # https://docs.databricks.com/dev-tools/api/latest/libraries.html#libraryinstallstatus
 ) -> None:
     """Poll library statuses until target library in desired state."""
     current_status = None
@@ -79,7 +128,7 @@ def wait_for_run_status(
     profile: Optional[str],
     run_id: Optional[str],
     target_status: List[str] = ["TERMINATED"],
-    failure_status: List[str] = ["INTERNAL_ERROR"],
+    failure_status: List[str] = ["INTERNAL_ERROR", "SKIPPED"],
 ) -> None:
     """Poll run status until in desired state."""
     current_status = None
