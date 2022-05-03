@@ -101,41 +101,17 @@ def define_job(c, jinja_template, config_file, environment_variable=None, profil
     and make use of the looping and conditional constructs in Jinja2 to iterate
     over those constructs.
     """
-    print(
-        f"""
-    {jinja_template=}
-    {config_file=}
-    {environment_variable=}
-    {profile=}
-    """
-    )
-
     profile = check_conf(c, profile, "databricks.profile")
 
     env = dict_from_keyvalue_list(environment_variable)
-    print("PARSED Environment Args")
-    print(f"{env=}")
-
-    print("PARSED CONFIG")
     conf = load_config(config_file, env)
-
-    print("JOBS FROM DATABRICKS:")
     jobs = list_jobs(profile)
     job_id = jobs[conf["name"]] if conf["name"] in jobs else None
-    pp(jobs)
-
-    print(f"{job_id=} --> CREATE = {job_id == None} :: UPDATE = {job_id != None}")
     if job_id:
         conf["job_id"] = job_id
 
-    pp(conf)
     merged_template = merge_template(jinja_template, conf)
-    #  print("=" * 20)
-    #  print(merged_template)
-    #  print("=" * 20)
     parsed_content = json.loads(merged_template)
-    print(json.dumps(parsed_content, indent=2))
-    #  print("=" * 20)
     result = create_or_reset_job(parsed_content, profile=profile, job_id=job_id)
     pp(result)
 
