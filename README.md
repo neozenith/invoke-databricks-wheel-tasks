@@ -41,8 +41,8 @@ jobs-api-version = 2.1
 `tasks.py`
 
 ```python
-from invoke import task, Collection, Tasks
-import invoke_databricks_wheel_tasks as db
+from invoke import task
+from invoke_databricks_wheel_tasks import * # noqa
 
 @task
 def format(c):
@@ -55,10 +55,6 @@ def build(c):
     """Build wheel."""
     c.run("rm -rfv dist/")
     c.run("poetry build -f wheel")
-
-# TODO: Find a neater way to capture root tasks as well as setting namespaces
-ns = Collection(*[v for v in globals().values() if type(v) == Task])
-ns.add_collection(db, name="db")
 ```
 
 Once your `tasks.py` is setup like this `invoke` will have the extra commands:
@@ -67,45 +63,29 @@ Once your `tasks.py` is setup like this `invoke` will have the extra commands:
 λ invoke --list
 Available tasks:
 
-  format         Autoformat code for code style.
-  build          Build wheel.
-  db.runjob          Trigger default job associated for this project.
-  db.reinstall   Reinstall version of wheel on cluster with a restart.
-  db.upload      Upload wheel artifact to DBFS.
-  db.clean       Clean wheel artifact from DBFS.
-```
-
-### Invoke Configuration
-
-Each of the tasks will require some combination of `profile`, `cluster-id`, `job-id` etc.
-You can create an `invoke.yaml` file which will get loaded into the `invoke` `Context` `Configuration`.
-
-This will greatly simplify your typing by setting workspace specific flags for your dev iteration loop.
-
-```yaml
-# https://docs.pyinvoke.org/en/latest/concepts/configuration.html
-databricks:
-  profile: yourprofilename
-  cluster-id: your-cluster-id-here
-  job-id: 9999
-  artifact-path: "dbfs:/FileStore/wheels/"
-  wheel: "dbfs:/FileStore/wheels/projectname-0.1.0-py3-none-any.whl"
+  build        Build wheel.
+  clean        Clean wheel artifact from DBFS.
+  define-job   Generate templated Job definition and upsert by Job Name in template.
+  format       Autoformat code for code style.
+  reinstall    Reinstall version of wheel on cluster with a restart.
+  runjob       Trigger default job associated for this project.
+  upload       Upload wheel artifact to DBFS.
 ```
 
 ## The Tasks
 
-### db.upload
+### upload
 
 This task will use `dbfs` to empty the upload path and then copy the built wheel from `dist/`.
 This project assumes you're using `poetry` or your wheel build output is located in `dist/`.
 
 If you have other requirements then _pull requests welcome_.
 
-### db.clean
+### clean
 
 This tasks will clean up all items on the target `--artifact-path`.
 
-### db.reinstall
+### reinstall
 
 After some trial and error, creating a job which creates a job cluster everytime is roughly 7 minutes.
 
@@ -116,7 +96,7 @@ However if you create an all purpose cluster that you:
  
  This takes roughly 2 minutes which is a much tighter development loop. So these three steps are what `db.reinstall` performs.
 
-### db.runjob
+### runjob
 
 Assuming you have defined a job, that uses a pre-existing cluster, that has your latest wheel installed, this will create a manual trigger of your job with `job-id`.
 
@@ -124,25 +104,33 @@ The triggering returns a `run-id`, where this `run-id` gets polled until the sta
 
 Then a call to `databricks runs get-output --run-id` happens to retrieve and `error`, `error_trace` and/or `logs` to be emitted to console.
 
+### define-job
 
-## All Together
+You may want to run `invoke --help define-job` to get the help documentation.
 
-Assuming, you created your cluster and job definition you may want to create a root level `@task` like:
+There are a few arguments that get abbreviated which we will explain before discussing how they work together.
+ - `--jinja-template` or `-j`: This is a [Jinja2 Template](https://jinja.palletsprojects.com/en/3.1.x/) that must resolve to a valid [Databricks Jobs JSON payload](https://docs.databricks.com/dev-tools/api/latest/jobs.html#) spec.
+ - `--config-file` or `-c`: This is either a JSON or YAML file to define the config, that gets used to parametrise the above `jinja-template`. This `config-file` can also be a Jinja template to inject values that can only be known at runtime like the git feature branch you are currently on. By default it is treated as a plain config file and not a Jinja Template unless `environment-variable` flags are specified (_see next_).
+ - `--environment-variable` or `-e`: This flag can be repeated many times to specify multiple values. It takes a string in the `key=value` format. 
+    - Eg `-e branch=$(git branch --show-current) -e main_wheel=$MAIN -e utils_wheel=$UTILS`
 
-```python
-@task(pre=[build, db.upload, db.reinstall, db.runjob], default=True)
-def dev(c):
-  """Default development loop."""
-  ...
+So an example command could look like:
+```sh
+invoke define-job \
+    -j jobs/base-job-template.json.j2 \
+    -c jobs/customer360-etl-job.yaml \
+    -e branch=$(git branch --show-current) \
+    -e main_whl=$(invoke dbfs-wheel-path) \
+    -e utils_whl=$UTILS_DBFS_WHEEL_PATH
 ```
 
-You will notice a few things here:
+Then the `-e` values can get templated into `customer360-etl-job.yml`. Then that YAML file gets parsed and injected into `base-job-template.json.j2`
 
-1. The method has no implementation `...`
-1. We are chaining a series of `@task`s in the `pre=[...]` argument
-1. The `default=True` on this root tasks means we could run either `invoke dev` or simply `invoke`.
+This will then check the list of Jobs in your workspace, see if a job with the same name exists already and perform a _create or replace job_ operation. This expects the `config-file` to have a key `name` to be able to cross check the list of existing jobs.
 
-How cool is that?
+**The beauty is that the specifics of `config-file` and `jinja-template` is completely up to you.**
+
+`config-file` is the minimal datastructure you need to configure `jinja-template` and you just use the [Jinja Control Structures](https://jinja.palletsprojects.com/en/3.1.x/templates/#list-of-control-structures) (`if-else`, `for-loop`, etc) to traverse it and populate `jinja-template`.
 
 
 # Contributing
