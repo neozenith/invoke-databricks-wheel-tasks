@@ -34,7 +34,8 @@ def list_jobs(profile: Optional[str] = None) -> Dict[str, str]:
 
     Returns a dictionary with job names as keys and job IDs as values.
     """
-    result = invoke.run(f"databricks --profile {profile} jobs list --output JSON", hide=True)
+    profile_flag = f"--profile {profile}" if profile else ""
+    result = invoke.run(f"databricks {profile_flag} jobs list --output JSON", hide=True)
     run_status = json.loads(result.stdout)
     jobs = {e["settings"]["name"]: e["job_id"] for e in run_status["jobs"]}
     return jobs
@@ -54,6 +55,7 @@ def create_or_reset_job(
     Payload must comply with:
     https://docs.databricks.com/dev-tools/api/latest/jobs.html#
     """
+    profile_flag = f"--profile {profile}" if profile else ""
     json_filename = "temp_job_file.json"
     if os.path.exists(json_filename):
         os.remove(json_filename)
@@ -62,9 +64,9 @@ def create_or_reset_job(
         json.dump(json_payload, f)
 
     if job_id:
-        result = invoke.run(f"databricks --profile {profile} jobs reset --job-id {job_id} --json-file {json_filename}")
+        result = invoke.run(f"databricks {profile_flag} jobs reset --job-id {job_id} --json-file {json_filename}")
     else:
-        result = invoke.run(f"databricks --profile {profile} jobs create --json-file {json_filename}")
+        result = invoke.run(f"databricks {profile_flag} jobs create --json-file {json_filename}")
 
     os.remove(json_filename)
     return result.stdout
@@ -82,10 +84,10 @@ def wait_for_cluster_status(
 ) -> None:
     """Poll cluster status until in desired state."""
     current_status = None
+    profile_flag = f"--profile {profile}" if profile else ""
+
     while current_status not in target_status:
-        result = c.run(
-            f"databricks --profile {profile} clusters events --cluster-id {cluster_id} --output JSON", hide=True
-        )
+        result = c.run(f"databricks {profile_flag} clusters events --cluster-id {cluster_id} --output JSON", hide=True)
         latest_event = json.loads(result.stdout)["events"][0]
         pp(latest_event["type"])
         current_status = latest_event["type"]
@@ -108,9 +110,11 @@ def wait_for_library_status(
     ],  # https://docs.databricks.com/dev-tools/api/latest/libraries.html#libraryinstallstatus
 ) -> None:
     """Poll library statuses until target library in desired state."""
+    profile_flag = f"--profile {profile}" if profile else ""
     current_status = None
+
     while current_status not in target_status:
-        result = c.run(f"databricks --profile {profile} libraries cluster-status --cluster-id {cluster_id}", hide=True)
+        result = c.run(f"databricks {profile_flag} libraries cluster-status --cluster-id {cluster_id}", hide=True)
         statuses = json.loads(result.stdout)["library_statuses"]
         filtered_status = [
             status for status in statuses if "whl" in status["library"] and status["library"]["whl"] == wheel
@@ -131,11 +135,13 @@ def wait_for_run_status(
     failure_status: List[str] = ["INTERNAL_ERROR", "SKIPPED"],
 ) -> None:
     """Poll run status until in desired state."""
+    profile_flag = f"--profile {profile}" if profile else ""
     current_status = None
     url = None
     run_status = {}
+
     while current_status not in target_status:
-        result = c.run(f"databricks --profile {profile} runs get --run-id {run_id}", hide=True)
+        result = c.run(f"databricks {profile_flag} runs get --run-id {run_id}", hide=True)
         run_status = json.loads(result.stdout)
         if url is None:
             url = run_status["run_page_url"]
@@ -150,7 +156,7 @@ def wait_for_run_status(
 
     pp(run_status["state"])
     print(url)
-    result = c.run(f"databricks --profile {profile} runs get-output --run-id {run_id}", hide=True)
+    result = c.run(f"databricks {profile_flag} runs get-output --run-id {run_id}", hide=True)
     output = json.loads(result.stdout)
 
     for k in ["error", "error_trace", "logs"]:
