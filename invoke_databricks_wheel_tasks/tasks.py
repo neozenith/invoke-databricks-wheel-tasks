@@ -137,8 +137,17 @@ def poetry_wheel_name(c):
 
 @task
 def dbfs_wheel_path(c, branch=None):
-    """Generate the target path this wheel should be uploaded to.
+    """Generate the target path (including wheelname) this wheel should be uploaded to.
 
     Omitting branch will try to detect it, but in some CI systems you may need to inject this from an environment variable.
     """
     print(default_dbfs_wheel_path(branch))
+
+
+@task
+def dbfs_wheel_path_root(c, branch=None):
+    """Generate the target path (excluding wheelname) this wheel should be uploaded to.
+
+    Omitting branch will try to detect it, but in some CI systems you may need to inject this from an environment variable.
+    """
+    print(default_dbfs_artifact_path(branch))
