@@ -63,13 +63,15 @@ Once your `tasks.py` is setup like this `invoke` will have the extra commands:
 λ invoke --list
 Available tasks:
 
-  build        Build wheel.
-  clean        Clean wheel artifact from DBFS.
-  define-job   Generate templated Job definition and upsert by Job Name in template.
-  format       Autoformat code for code style.
-  reinstall    Reinstall version of wheel on cluster with a restart.
-  runjob       Trigger default job associated for this project.
-  upload       Upload wheel artifact to DBFS.
+  build               Build wheel.
+  clean               Clean wheel artifact from DBFS.
+  dbfs-wheel-path     Generate the target path this wheel should be uploaded to.
+  define-job          Generate templated Job definition and upsert by Job Name in template.
+  format              Autoformat code for code style.
+  poetry-wheel-name   Display the name of the wheel file poetry would build.
+  reinstall           Reinstall version of wheel on cluster with a restart.
+  runjob              Trigger default job associated for this project.
+  upload              Upload wheel artifact to DBFS.
 ```
 
 ## The Tasks
