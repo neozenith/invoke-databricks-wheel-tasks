@@ -16,6 +16,7 @@ from .utils.databricks import (
     wait_for_run_status,
 )
 from .utils.misc import dict_from_keyvalue_list, load_config, merge_template, tidy
+from .utils.poetry import poetry_wheelname
 
 # NOTE: Invoke tasks files don't support mypy typechecking for the forseeable future
 # They were looking at addressing it after Python2 EOL 01-01-2020 but there was a global pandemic.
@@ -126,3 +127,18 @@ def runjob(c, profile=None, job_id=None):
     result = c.run(f"databricks {profile_flag} jobs run-now --job-id {job_id}", hide=True)
     run_id = json.loads(result.stdout)["run_id"]
     wait_for_run_status(c, profile, run_id)
+
+
+@task
+def poetry_wheel_name(c):
+    """Display the name of the wheel file poetry would build."""
+    print(poetry_wheelname())
+
+
+@task
+def dbfs_wheel_path(c, branch=None):
+    """Generate the target path this wheel should be uploaded to.
+
+    Omitting branch will try to detect it, but in some CI systems you may need to inject this from an environment variable.
+    """
+    print(default_dbfs_wheel_path(branch))
