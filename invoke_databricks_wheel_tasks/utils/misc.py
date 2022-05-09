@@ -32,7 +32,7 @@ def merge_template(template_filename: str, config: Optional[Dict[str, Any]]) -> 
 
     # Step 2: Treat raw_content as a Jinja2 template if providing configuration
     if config:
-        content = jinja2.Template(raw_content).render(**config)
+        content = jinja2.Template(raw_content, undefined=jinja2.StrictUndefined).render(**config)
     else:
         content = raw_content
 
