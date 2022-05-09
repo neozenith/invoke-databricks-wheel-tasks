@@ -63,7 +63,7 @@ unicode_backport = ["unicodedata2"]
 
 [[package]]
 name = "click"
-version = "8.1.2"
+version = "8.1.3"
 description = "Composable command line interface toolkit"
 category = "main"
 optional = false
@@ -467,7 +467,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "types-invoke"
-version = "1.6.6"
+version = "1.6.7"
 description = "Typing stubs for invoke"
 category = "dev"
 optional = false
@@ -497,7 +497,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "77155b26637d1fc5dadf0c65f5cae15696ca51975ec45c06484802b963b6cbb0"
+content-hash = "b5bee65edea257ea55501070c85e23fccc7200967df7ae7a04fb94bd3c52f3c5"
 
 [metadata.files]
 atomicwrites = [
@@ -542,8 +542,8 @@ charset-normalizer = [
     {file = "charset_normalizer-2.0.12-py3-none-any.whl", hash = "sha256:6881edbebdb17b39b4eaaa821b438bf6eddffb4468cf344f09f89def34a8b1df"},
 ]
 click = [
-    {file = "click-8.1.2-py3-none-any.whl", hash = "sha256:24e1a4a9ec5bf6299411369b208c1df2188d9eb8d916302fe6bf03faed227f1e"},
-    {file = "click-8.1.2.tar.gz", hash = "sha256:479707fe14d9ec9a0757618b7a100a0ae4c4e236fac5b7f80ca68028141a1a72"},
+    {file = "click-8.1.3-py3-none-any.whl", hash = "sha256:bb4d8133cb15a609f44e8213d9b391b0809795062913b383c62be0ee95b1db48"},
+    {file = "click-8.1.3.tar.gz", hash = "sha256:7682dc8afb30297001674575ea00d1814d808d6a36af415a82bd481d37ba7b8e"},
 ]
 colorama = [
     {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"},
@@ -780,8 +780,8 @@ tomli = [
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
 ]
 types-invoke = [
-    {file = "types-invoke-1.6.6.tar.gz", hash = "sha256:c235a7778815546e853785ecee0bbe05821116c071dc3942cd621bb25c574d72"},
-    {file = "types_invoke-1.6.6-py3-none-any.whl", hash = "sha256:4c1eb5cd03114934baddd7742b46ee4a1f2c1f7558083f99bf05427d4b45a253"},
+    {file = "types-invoke-1.6.7.tar.gz", hash = "sha256:7574592189370803d487e019804b1aefe77f29b3666ec22829a2a41fd6921337"},
+    {file = "types_invoke-1.6.7-py3-none-any.whl", hash = "sha256:1da33bbcb54f9df10426b6bbfffff5c1f963a0a01cdc1a027539cf84e02b3a2a"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.2.0-py3-none-any.whl", hash = "sha256:6657594ee297170d19f67d55c05852a874e7eb634f4f753dbd667855e07c1708"},
