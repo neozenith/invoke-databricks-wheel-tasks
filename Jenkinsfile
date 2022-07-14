@@ -93,6 +93,7 @@ pipeline {
           steps {
               script {
                 // https://python-poetry.org/docs/repositories/#using-a-private-repository
+                // https://python-poetry.org/docs/repositories/#configuring-credentials
                 def NEXUS_USERNAME = "jenkins"
                 def NEXUS_PASSWORD_CMD = """
                       aws secretsmanager get-secret-value \
@@ -101,14 +102,13 @@ pipeline {
                       --secret-id infra/jenkins/nexus-secret | jq -r .SecretString"""
                 def NEXUS_PASSWORD = sh(script: NEXUS_PASSWORD_CMD, returnStdout: true)
                 withSecretEnv([
-                    [var: "NEXUS_PASSWORD", password: NEXUS_PASSWORD],
-                    [var: "NEXUS_USERNAME", password: NEXUS_USERNAME]
+                    [var: "POETRY_HTTP_BASIC_PYPI_USERNAME", password: NEXUS_PASSWORD],
+                    [var: "POETRY_HTTP_BASIC_PYPI_PASSWORD", password: NEXUS_USERNAME]
                   ]) {
                   sh(script: '''
-                    poetry config --local http-basic.nexus ${NEXUS_USERNAME} ${NEXUS_PASSWORD}
+                    poetry publish --repository nexus
                   ''', returnStdout: false)
                 }
-                sh "poetry publish --repository nexus"
               }
           }
       }
