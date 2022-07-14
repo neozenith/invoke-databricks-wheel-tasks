@@ -108,7 +108,7 @@ pipeline {
                     poetry config --local http-basic.nexus ${NEXUS_USERNAME} ${NEXUS_PASSWORD}
                   ''', returnStdout: false)
                 }
-                sh "poetry publish --dry-run --repository nexus"
+                sh "poetry publish --repository nexus"
               }
           }
       }
