@@ -87,10 +87,7 @@ pipeline {
       stage('Publishing') {
 
           when {
-              allOf {
-                  branch 'main'
-                  buildingTag()
-              }
+            buildingTag()
           }
 
           steps {
