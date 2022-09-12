@@ -32,7 +32,14 @@ def merge_template(template_filename: str, config: Optional[Dict[str, Any]]) -> 
 
     # Step 2: Treat raw_content as a Jinja2 template if providing configuration
     if config:
-        content = jinja2.Template(raw_content, undefined=jinja2.StrictUndefined).render(**config)
+
+        # NOTE: Providing jinja 2.11.x compatable version to better cross operate
+        # with dbt-databricks v1.2.2 and down stream dbt-spark and dbt-core
+        if int(jinja2.__version__[0]) >= 3:
+            content = jinja2.Template(raw_content, undefined=jinja2.StrictUndefined).render(**config)
+        else:
+            content = jinja2.Template(raw_content).render(**config)
+
     else:
         content = raw_content
 
