@@ -26,6 +26,7 @@ jobs:
 workflows:
   main:
     jobs:
+      - checkout
       - poetry-invoke-lint
       - poetry-invoke-typecheck
       - python/test:
