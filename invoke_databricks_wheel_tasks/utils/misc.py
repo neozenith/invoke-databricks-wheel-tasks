@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional
 
 # Third Party
 import jinja2
-from invoke.vendor import yaml3 as yaml
+from invoke.vendor import yaml
 
 
 def tidy(text: str) -> str:

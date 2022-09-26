@@ -13,7 +13,7 @@ repository = "https://github.com/neozenith/invoke-databricks-wheel-tasks"
 python = "^3.8"
 databricks-cli = "^0.16.4"
 poetry-core = "^1.0.8"
-invoke = "^1.7.0"
+invoke = {url = "https://github.com/neozenith/invoke/archive/deprecate-python2.zip"}
 Jinja2 = ">=2.11.3"
 
 [tool.poetry.dev-dependencies]
