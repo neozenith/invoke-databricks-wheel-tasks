@@ -147,7 +147,7 @@ python-versions = "*"
 name = "invoke"
 version = "1.7.1"
 description = "Pythonic task execution"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -491,7 +491,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "90175f2608471d445774ce120947fa99ae82198b8b83cf3f9ab2e721c7193485"
+content-hash = "db5a261d03587ef9458cb5b68f385decf3c9037d2f52e2e02dec776d4575be9a"
 
 [metadata.files]
 attrs = []
