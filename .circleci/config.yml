@@ -31,17 +31,17 @@ workflows:
       - poetry-invoke-lint
       - poetry-invoke-typecheck
       - python/test:
-          name: "Test 3.6"
-          version: "3.6"
+          name: "Test 3.8"
+          version: "3.8"
           requires: ["poetry-invoke-lint", "poetry-invoke-typecheck"]
       - python/test:
           name: Test << matrix.version >>
           # It's not worth testing on other interpreters if the baseline one
           # failed. Can't run >4 jobs at a time anyhow!
-          requires: ["Test 3.6"]
+          requires: ["Test 3.8"]
           matrix:
             parameters:
-              version: ["3.7", "3.8", "3.9", "3.10"]
+              version: ["3.9", "3.10"]
 
 # TODO: 
 # - coverage reporting
