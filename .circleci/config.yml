@@ -26,7 +26,7 @@ workflows:
       - python/test:
           name: "Test 3.8"
           version: "3.8"
-          requires: ["poetry-invoke-lint", "poetry-invoke-typecheck"]
+          requires: ["poetry-invoke-lint"]
       - python/test:
           name: Test << matrix.version >>
           # It's not worth testing on other interpreters if the baseline one
