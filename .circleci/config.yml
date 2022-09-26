@@ -1,0 +1,49 @@
+version: 2.1
+
+orbs:
+  # https://circleci.com/developer/orbs/orb/circleci/python#usage-work-with-poetry
+  python: circleci/python@2.1.1
+
+jobs:
+  poetry-invoke-lint:
+    executor: python/default
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+      - run:
+          name: Style Check and Linting
+          command: poetry run inv lint
+
+  poetry-invoke-typecheck:
+    executor: python/default
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+      - run:
+          name: Type Checking
+          command: poetry run inv typecheck
+
+workflows:
+  main:
+    jobs:
+      - poetry-invoke-lint
+      - poetry-invoke-typecheck
+      - python/test:
+          name: "Test 3.8"
+          version: "3.8"
+          requires: ["poetry-invoke-lint", "poetry-invoke-typecheck"]
+      - python/test:
+          name: Test << matrix.version >>
+          # It's not worth testing on other interpreters if the baseline one
+          # failed. Can't run >4 jobs at a time anyhow!
+          requires: ["Test 3.8"]
+          matrix:
+            parameters:
+              version: ["3.9", "3.10"]
+
+# TODO: 
+# - coverage reporting
+# - Docs
+# - Deploy on main branch tagged
