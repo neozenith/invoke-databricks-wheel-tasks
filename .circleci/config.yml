@@ -8,6 +8,7 @@ jobs:
   poetry-invoke-lint:
     executor: python/default
     steps:
+      - checkout
       - python/install-packages:
           pkg-manager: poetry
       - run:
@@ -17,6 +18,7 @@ jobs:
   poetry-invoke-typecheck:
     executor: python/default
     steps:
+      - checkout
       - python/install-packages:
           pkg-manager: poetry
       - run:
@@ -26,12 +28,12 @@ jobs:
 workflows:
   main:
     jobs:
-      - checkout
       - poetry-invoke-lint
       - poetry-invoke-typecheck
       - python/test:
           name: "Test 3.6"
           version: "3.6"
+          requires: ["poetry-invoke-lint", "poetry-invoke-typecheck"]
       - python/test:
           name: Test << matrix.version >>
           # It's not worth testing on other interpreters if the baseline one
