@@ -14,22 +14,15 @@ jobs:
       - run:
           name: Style Check and Linting
           command: poetry run inv lint
-
-  poetry-invoke-typecheck:
-    executor: python/default
-    steps:
-      - checkout
-      - python/install-packages:
-          pkg-manager: poetry
       - run:
           name: Type Checking
           command: poetry run inv typecheck
+
 
 workflows:
   main:
     jobs:
       - poetry-invoke-lint
-      - poetry-invoke-typecheck
       - python/test:
           name: "Test 3.8"
           version: "3.8"
