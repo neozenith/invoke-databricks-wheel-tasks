@@ -43,7 +43,10 @@ import_heading_thirdparty = "Third Party"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-s -vvv --color=yes --cov=. --no-cov-on-fail"
+addopts = "-s -vvv --strict-markers --color=yes --cov=. --no-cov-on-fail -m \"not integration\""
+markers = [
+  "integration: Integration tests that require an actual databricks workspace."
+]
 
 [tool.coverage.run]
 omit = ["tests/*", "**/__init__.py", "tasks.py"]

@@ -10,7 +10,7 @@ from invoke_databricks_wheel_tasks import *  # noqa
 # https://github.com/pyinvoke/invoke/issues/357
 
 
-@task(pre=[build, upload, reinstall, runjob], default=True)  # noqa
-def dev(c):
-    """Default databricks flow."""
-    ...
+@task
+def integration_test(c):
+    """Run pytest with no integration tests."""
+    c.run("python3 -m pytest -m integration")
