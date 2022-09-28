@@ -154,6 +154,7 @@ python-versions = "*"
 [package.source]
 type = "url"
 url = "https://github.com/neozenith/invoke/archive/deprecate-python2.zip"
+
 [[package]]
 name = "invoke-common-tasks"
 version = "0.3.2"
@@ -407,6 +408,17 @@ pytest = ">=4.6"
 testing = ["virtualenv", "pytest-xdist", "six", "process-tests", "hunter", "fields"]
 
 [[package]]
+name = "python-dotenv"
+version = "0.21.0"
+description = "Read key-value pairs from a .env file and set them as environment variables"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+cli = ["click (>=5.0)"]
+
+[[package]]
 name = "requests"
 version = "2.28.1"
 description = "Python HTTP for Humans."
@@ -491,7 +503,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "db5a261d03587ef9458cb5b68f385decf3c9037d2f52e2e02dec776d4575be9a"
+content-hash = "0819b06c0615b27bfb3f0434219d75cdb78f35d3cf4cb717b7e51741d716ae7d"
 
 [metadata.files]
 attrs = []
@@ -552,6 +564,7 @@ pyjwt = []
 pyparsing = []
 pytest = []
 pytest-cov = []
+python-dotenv = []
 requests = []
 six = []
 snowballstemmer = []

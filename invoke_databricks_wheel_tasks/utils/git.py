@@ -4,8 +4,6 @@ from functools import lru_cache
 # Third Party
 from invoke import run
 
-POLL_DELAY = 5
-
 
 @lru_cache(maxsize=None)
 def git_current_branch() -> str:
