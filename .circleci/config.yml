@@ -21,6 +21,9 @@ jobs:
 
   integration-test:
     executor: python/default
+    parameters:
+      author:
+        type: string
     steps:
       - checkout
       - python/install-packages:
@@ -28,7 +31,7 @@ jobs:
       - when:
           condition:
             # Only run this if I have triggered the pipeline to prevent malicious PRs
-            equal: ["neozenith", $CIRCLE_USERNAME]
+            equal: ["neozenith", << parameters.author >>]
           steps:
             
             - run:
@@ -60,6 +63,7 @@ workflows:
       - integration-test:
           name: "Databricks Workspace Integration Tests"
           requires: ["Test 3.8", "Test 3.9"]
+          author: $CIRCLE_USERNAME
 
 # TODO: 
 # - Build Docs
