@@ -28,7 +28,7 @@ jobs:
       - when:
           condition:
             # Only run this if I have triggered the pipeline to prevent malicious PRs
-            equal: ["neozenith", $CIRLCE_USERNAME]
+            equal: ["neozenith", $CIRCLE_USERNAME]
           steps:
             
             - run:
@@ -43,7 +43,7 @@ workflows:
 
       - python/test:
           # Test most recent version first
-          name: "Test 3.10"
+          name: "Test Latest (3.10)"
           version: "3.10"
           requires: ["poetry-invoke-lint"]
 
@@ -52,10 +52,10 @@ workflows:
           name: Test << matrix.version >>
           # It's not worth testing on other interpreters if the baseline one
           # failed. Can't run >4 jobs at a time anyhow!
-          requires: ["Test 3.10"]
+          requires: ["Test Latest (3.10)"]
           matrix:
             parameters:
-              version: ["3.8", "3.9"]
+              version: ["3.9", "3.8"]
 
       - integration-test:
           name: "Databricks Workspace Integration Tests"
