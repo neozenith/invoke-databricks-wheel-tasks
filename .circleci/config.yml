@@ -28,7 +28,7 @@ jobs:
       - when:
           condition:
             # Only run this if I have triggered the pipeline to prevent malicious PRs
-            equal: ["neozenith.dev@gmail.com", $CIRLCE_USERNAME]
+            equal: ["neozenith", $CIRLCE_USERNAME]
           steps:
             
             - run:
