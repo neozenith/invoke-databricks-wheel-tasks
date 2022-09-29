@@ -56,4 +56,6 @@ workflows:
           requires: ["Test 3.8", "Test 3.9"]
 
 # TODO: 
+# Export test report
+# Export coverage report
 # - Build Docs
