@@ -21,9 +21,6 @@ jobs:
 
   integration-test:
     executor: python/default
-    parameters:
-      author:
-        type: string
     steps:
       - checkout
       - python/install-packages:
