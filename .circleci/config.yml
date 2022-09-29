@@ -5,6 +5,7 @@ orbs:
   python: circleci/python@2.1.1
 
 jobs:
+
   poetry-invoke-lint:
     executor: python/default
     steps:
@@ -17,15 +18,22 @@ jobs:
       - run:
           name: Type Checking
           command: poetry run inv typecheck
+
   integration-test:
     executor: python/default
     steps:
       - checkout
       - python/install-packages:
           pkg-manager: poetry
-      - run:
-          name: Integration Tests against Databricks Workspace
-          command: poetry run inv integration-test
+      - when:
+          condition:
+            # Only run this if I have triggered the pipeline to prevent malicious PRs
+            equal: ["neozenith.dev@gmail.com", $CIRLCE_USERNAME]
+          steps:
+            
+            - run:
+                name: Integration Tests against Databricks Workspace
+                command: poetry run inv integration-test
 
 
 workflows:
@@ -50,11 +58,8 @@ workflows:
               version: ["3.8", "3.9"]
 
       - integration-test:
-          # TODO: Only conditionally run this so it avoids malicious "contributors" spamming my databricks account.
-          # Perhaps only run if the author is me.
           name: "Databricks Workspace Integration Tests"
           requires: ["Test 3.8", "Test 3.9"]
 
 # TODO: 
-# - Docs
-# - Deploy on main branch tagged
+# - Build Docs
