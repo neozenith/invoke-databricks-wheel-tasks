@@ -2,7 +2,25 @@
 
 Databricks Python Wheel dev tasks in a namespaced collection of tasks to enrich the Invoke CLI task runner.
 
-## Getting Started
+<!--TOC-->
+
+- [Invoke Databricks Wheel Tasks](#invoke-databricks-wheel-tasks)
+- [Getting Started](#getting-started)
+  - [Databricks CLI Config](#databricks-cli-config)
+    - [Config file](#config-file)
+    - [Environment Variables](#environment-variables)
+  - [Invoke Setup](#invoke-setup)
+- [The Tasks](#the-tasks)
+  - [upload](#upload)
+  - [define-job](#define-job)
+  - [run-job](#run-job)
+- [Contributing](#contributing)
+- [Resources](#resources)
+- [Prior Art](#prior-art)
+
+<!--TOC-->
+
+# Getting Started
 
 ```sh
 pip install invoke-databricks-wheel-tasks
@@ -10,7 +28,7 @@ pip install invoke-databricks-wheel-tasks
 
 This will also install `invoke` and `databricks-cli`.
 
-### Databricks CLI Config
+## Databricks CLI Config
 
 It is assumed you will follow the documentation provided to setup `databricks-cli`.
 
@@ -18,7 +36,7 @@ https://docs.databricks.com/dev-tools/cli/index.html
 
 There are 2 options config file or environment variables.
 
-#### Config file
+### Config file
 
 You'll need to setup a Personal Access Token. Then run the following command:
 
@@ -40,7 +58,7 @@ token = dapi0123456789abcdef0123456789abcdef
 jobs-api-version = 2.1
 ```
 
-#### Environment Variables
+### Environment Variables
 
 On some CI systems it is better to export secrets into environment variables rather than have config files with secrets on CI servers.
 
@@ -52,7 +70,7 @@ DATABRICKS_TOKEN=dapi0123456789abcdef0123456789abcdef
 DATABRICKS_JOBS_API_VERSION="2.1
 ```
 
-### Invoke Setup
+## Invoke Setup
 
 `tasks.py`
 
@@ -75,9 +93,9 @@ Available tasks:
   upload                 Upload wheel artifact to DBFS.
 ```
 
-## The Tasks
+# The Tasks
 
-### upload
+## upload
 
 This task will use `dbfs` to empty the upload path and then copy the built wheel from `dist/`.
 This project assumes you're using `poetry` or your wheel build output is located in `dist/`.
@@ -85,7 +103,7 @@ This project assumes you're using `poetry` or your wheel build output is located
 If you have other requirements then _pull requests welcome_.
 
 
-### define-job
+## define-job
 
 You may want to run `invoke --help define-job` to get the help documentation.
 
@@ -113,7 +131,7 @@ This will then check the list of Jobs in your workspace, see if a job with the s
 
 `config-file` is the minimal datastructure you need to configure `jinja-template` and you just use the [Jinja Control Structures](https://jinja.palletsprojects.com/en/3.1.x/templates/#list-of-control-structures) (`if-else`, `for-loop`, etc) to traverse it and populate `jinja-template`.
 
-### run-job
+## run-job
 
 This will create a manual trigger of your job with `job-id`.
 

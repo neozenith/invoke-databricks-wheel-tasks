@@ -16,3 +16,9 @@ def integration_test(c):
     # Run normal unit tests and append integration test coverage.
     c.run("python3 -m pytest")
     c.run("python3 -m pytest -m integration --cov-append")
+
+@task
+def docs(c):
+    """Automate documentation tasks."""
+    c.run("md_toc --in-place github --header-levels 4 README.md")
+    # TODO: Add Sphinx docs generation here too.
