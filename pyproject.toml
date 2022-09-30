@@ -44,7 +44,7 @@ import_heading_thirdparty = "Third Party"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-s -vvv --strict-markers --color=yes --cov=. --no-cov-on-fail -m \"not integration\""
+addopts = "-s -vvv --strict-markers --color=yes --cov=. --no-cov-on-fail --cov-report html --cov-report term --junitxml=test-results/junit.xml -m \"not integration\""
 markers = [
   "integration: Integration tests that require an actual databricks workspace."
 ]

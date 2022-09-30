@@ -12,5 +12,7 @@ from invoke_databricks_wheel_tasks import *  # noqa
 
 @task
 def integration_test(c):
-    """Run pytest with no integration tests."""
-    c.run("python3 -m pytest -m integration")
+    """Run pytest with integration tests that use a test Databricks workspace."""
+    # Run normal unit tests and append integration test coverage.
+    c.run("python3 -m pytest")
+    c.run("python3 -m pytest -m integration --cov-append")

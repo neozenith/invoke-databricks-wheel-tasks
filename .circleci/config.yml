@@ -28,6 +28,11 @@ jobs:
       - run:
           name: Integration Tests against Databricks Workspace
           command: poetry run inv integration-test
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: htmlcov/
+          destination: integration-test-coverage-report
 
 
 workflows:
@@ -54,6 +59,7 @@ workflows:
       - integration-test:
           name: "Databricks Workspace Integration Tests"
           requires: ["Test 3.8", "Test 3.9"]
+
 
 # TODO: 
 # Export test report
