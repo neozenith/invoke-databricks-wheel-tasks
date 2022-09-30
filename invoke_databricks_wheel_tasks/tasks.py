@@ -99,7 +99,7 @@ def define_job(c, jinja_template, config_file, environment_variable=None, profil
     env = dict_from_keyvalue_list(environment_variable)
     conf = load_config(config_file, env)
 
-    job_id = None # Default to None and assume a new job needs to be created
+    job_id = None  # Default to None and assume a new job needs to be created
     if "job_id" in conf:
         # Update a specific job_id that already exists specified in the config
         job_id = conf["job_id"]
