@@ -17,6 +17,7 @@ def integration_test(c):
     c.run("python3 -m pytest")
     c.run("python3 -m pytest -m integration --cov-append")
 
+
 @task
 def docs(c):
     """Automate documentation tasks."""
