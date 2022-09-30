@@ -1,14 +1,17 @@
 # Standard Library
+import json
 import re
 
 # Third Party
 import pytest
+from invoke import Context
 
 # Our Libraries
 from invoke_databricks_wheel_tasks.utils.databricks import (
     default_dbfs_artifact_path,
     default_dbfs_wheel_path,
     list_jobs,
+    wait_for_run_status
 )
 
 
@@ -48,3 +51,20 @@ def test_list_jobs(databricks_test_workspace):
 
     # Then
     assert type(result) == dict
+
+@pytest.mark.integration
+def test_wait_for_run_status(databricks_test_workspace, capsys):
+    # Given
+    c = Context() # basic invoke Context with default config/
+    job_id = "911628753476440" # Simple example task already configured in workspace
+    profile = None
+
+    # When
+    result = c.run(f"databricks jobs run-now --job-id {job_id}", hide=True)
+    run_id = json.loads(result.stdout)["run_id"]
+    wait_for_run_status(c, profile, run_id)
+
+    # Then
+    out, err = capsys.readouterr()
+    assert err == ''
+    assert len(out) > 0

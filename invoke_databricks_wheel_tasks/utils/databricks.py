@@ -90,10 +90,10 @@ def wait_for_run_status(
         run_status = json.loads(result.stdout)
         if url is None:
             url = run_status["run_page_url"]
-            print(url)
+            # print(url)
 
         current_status = run_status["state"]["life_cycle_state"]
-        print(current_status)
+        # print(current_status)
         if current_status in failure_status:
             raise ValueError(f"Run entered failed state {current_status}... aborting.")
 
@@ -101,11 +101,13 @@ def wait_for_run_status(
 
     # TODO: convert to logger output
     pp(run_status["state"])
-    print(url)
-    result = c.run(f"databricks {profile_flag} runs get-output --run-id {run_id}", hide=True)
-    output = json.loads(result.stdout)
+    # print(url)
+    # result = c.run(f"databricks {profile_flag} runs get-output --run-id {run_id}", hide=True)
+    # output = json.loads(result.stdout)
 
-    for k in ["error", "error_trace", "logs"]:
-        if k in output:
-            print(f"\n========{k.upper()}======\n")
-            print("\n".join(output[k].split("\\n")))
+    # TODO: show error output
+
+    # for k in ["error", "error_trace", "logs"]:
+    #     if k in output:
+    #         print(f"\n========{k.upper()}======\n")
+    #         print("\n".join(output[k].split("\\n")))

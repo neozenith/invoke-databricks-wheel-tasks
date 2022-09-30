@@ -98,10 +98,17 @@ def define_job(c, jinja_template, config_file, environment_variable=None, profil
     """
     env = dict_from_keyvalue_list(environment_variable)
     conf = load_config(config_file, env)
-    jobs = list_jobs(profile)
-    job_id = jobs[conf["name"]] if conf["name"] in jobs else None
-    if job_id:
-        conf["job_id"] = job_id
+
+    job_id = None # Default to None and assume a new job needs to be created
+    if "job_id" in conf:
+        # Update a specific job_id that already exists specified in the config
+        job_id = conf["job_id"]
+    else:
+        # Determine the job_id by looking up a job by name
+        jobs = list_jobs(profile)
+        job_id = jobs[conf["name"]] if conf["name"] in jobs else None
+        if job_id:
+            conf["job_id"] = job_id
 
     merged_template = merge_template(jinja_template, conf)
     parsed_content = json.loads(merged_template)
