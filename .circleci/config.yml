@@ -8,6 +8,7 @@ jobs:
 
   poetry-invoke-lint:
     executor: python/default
+    resource_class: small
     steps:
       - checkout
       - python/install-packages:
@@ -19,8 +20,28 @@ jobs:
           name: Type Checking
           command: poetry run inv typecheck
 
+  poetry-invoke-typecheck:
+    parameters:
+      version:
+        default: '3.10'
+        type: string
+
+    docker:
+      - image:  'cimg/python:<< parameters.version >>'
+      
+    resource_class: small
+    
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+      - run:
+          name: Type Checking
+          command: poetry run inv typecheck
+
   integration-test:
     executor: python/default
+    resource_class: small
     steps:
       - checkout
       - python/install-packages:
@@ -40,11 +61,18 @@ workflows:
     jobs:
       - poetry-invoke-lint
 
+      - poetry-invoke-typecheck:
+          # Typecheck across versions as backwards compatibility can be sketchy if not implemented correctly
+          name: "Typecheck << matrix.version >>"
+          matrix: 
+            parameters:
+              version: ["3.10", "3.9", "3.8"]
+
       - python/test:
           # Test most recent version first
           name: "Test Latest (3.10)"
           version: "3.10"
-          requires: ["poetry-invoke-lint"]
+          requires: ["poetry-invoke-lint", "Typecheck 3.10"]
 
       - python/test:
           # Test older compatable versions last.
