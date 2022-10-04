@@ -36,4 +36,3 @@ def test_upload(databricks_test_workspace, upload_target_path):
     # Then
     result = c.run(f"dbfs ls {upload_target_path}", hide=True)
     assert len(result.stdout.splitlines()) == 1
-

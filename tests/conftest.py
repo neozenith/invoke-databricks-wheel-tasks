@@ -23,9 +23,10 @@ def databricks_test_workspace(monkeypatch):
     A) Create a .env file which exports the below variables for your test databricks workspace
     B) Export the below environment variables into your CI system's secrets.
     """
-
     if (Path.home() / ".databrickscfg").exists():
-        raise FixtureConfigurationError("It looks like you have a ~/.databrickscfg. It is strongly advised to backup and remove this whilst testing to avoid polluting other workspaces unintentionally.")
+        raise FixtureConfigurationError(
+            "It looks like you have a ~/.databrickscfg. It is strongly advised to backup and remove this whilst testing to avoid polluting other workspaces unintentionally."
+        )
 
     try:
         monkeypatch.setenv("DATABRICKS_HOST", os.environ["TEST_FIXTURE_DATABRICKS_HOST"])
