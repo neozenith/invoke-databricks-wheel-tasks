@@ -47,15 +47,15 @@ def dbfs_wheel_path_root(c, branch=None):
 
 
 @task
-def upload(c, profile=None, artifact_path=None, branch_name=None):
+def upload(c, profile=None, artifact_path=None, branch_name=None, source_path="dist/"):
     """Upload wheel artifact from dist to DBFS."""
     profile_flag = f"--profile {profile}" if profile else ""
 
     if artifact_path is None:
         artifact_path = default_dbfs_artifact_path(branch_name)
 
-    print(f"Copying from dist/ --> '{artifact_path}' recursively...")
-    c.run(f"dbfs {profile_flag} cp -r dist/ {artifact_path} --overwrite")
+    print(f"Copying from {source_path} --> '{artifact_path}' recursively...")
+    c.run(f"dbfs {profile_flag} cp -r {source_path} {artifact_path} --overwrite")
 
     c.run(f"dbfs {profile_flag} ls {artifact_path}")
 
