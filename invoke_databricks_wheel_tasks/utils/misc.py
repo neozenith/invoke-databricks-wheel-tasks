@@ -60,4 +60,4 @@ def load_config(filename: str, environment_variables: Optional[Dict[str, str]] =
     elif any([filename.lower().endswith(ext) for ext in ["yml", "yaml"]]):
         return yaml.safe_load(content)
 
-    raise ValueError(f"File type of {filename} not supported.")
+    raise ValueError(f"File type of {filename} not supported.")  # pragma: no cover

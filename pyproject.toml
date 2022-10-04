@@ -51,7 +51,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-omit = ["tests/*", "**/__init__.py", "tasks.py"]
+omit = ["tests/*", "**/__init__.py", "**/tasks.py"]
 branch = true
 
 [tool.mypy]
