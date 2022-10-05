@@ -11,9 +11,6 @@ main = "projectname:main"
 [tool.poetry.dependencies]
 python = "^3.8"
 
-[tool.poetry.dev-dependencies]
-invoke-databricks-wheel-tasks = {path = "../../", develop=true} # implicit dependency to always use the version under test
-
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"

@@ -28,7 +28,8 @@ def example_wheel() -> Tuple[Path, str]:
 
     shutil.rmtree(dist_path, ignore_errors=True)
     with c.cd(source_path):
-        c.run("poetry build -f wheel", hide=False)
+        result = c.run("poetry build -f wheel", hide=False, echo=True)
+        print(result.stdout)
 
     wheel_name = [w for x in os.walk(source_path) for w in x[2] if w.endswith(".whl")][0]
     return (dist_path, wheel_name)
