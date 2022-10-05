@@ -26,6 +26,10 @@ def example_wheel() -> Tuple[Path, str]:
     source_path = Path("./tests/example_databricks_project/")
     dist_path = source_path / "dist"
 
+    result = subprocess.run("poetry --version", cwd=str(source_path), shell=True, capture_output=True)
+    print(result)
+    print(result.stdout.decode("utf-8"))
+
     result = subprocess.run("ls -la", cwd=str(source_path), shell=True, capture_output=True)
     print(result)
     print(result.stdout.decode("utf-8"))
