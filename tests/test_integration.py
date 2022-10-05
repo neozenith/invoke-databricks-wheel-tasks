@@ -23,14 +23,12 @@ from invoke_databricks_wheel_tasks.utils.misc import load_config, merge_template
 @pytest.fixture(scope="function")
 def example_wheel() -> Tuple[Path, str]:
     """Build a minimal example wheel for simulating an integration test."""
-    c = Context()
     source_path = Path("./tests/example_databricks_project/")
     dist_path = source_path / "dist"
 
-    
     result = subprocess.run("poetry build -f wheel", cwd=str(source_path), shell=True, capture_output=True)
     print(result)
-    print(result.stdout.decode('utf-8'))        
+    print(result.stdout.decode("utf-8"))
 
     wheel_name = [w for x in os.walk(source_path) for w in x[2] if w.endswith(".whl")][0]
     yield (dist_path, wheel_name)
