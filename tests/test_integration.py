@@ -27,6 +27,7 @@ def example_wheel() -> Tuple[Path, str]:
     dist_path = source_path / "dist"
 
     shutil.rmtree(dist_path, ignore_errors=True)
+    c.run("which poetry", hide=False, echo=True)
     with c.cd(source_path):
         result = c.run("poetry build -f wheel", hide=False, echo=True)
         print(result.stdout)
