@@ -1,0 +1,7 @@
+{
+    "name": "single",
+    "wheels": [
+        "path/to/my/util/wheel",
+        "path/to/my/main/wheel"
+    ]
+}

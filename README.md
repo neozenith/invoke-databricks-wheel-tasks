@@ -1,8 +1,30 @@
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/neozenith/invoke-databricks-wheel-tasks/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/neozenith/invoke-databricks-wheel-tasks/tree/main)
+
 # Invoke Databricks Wheel Tasks
 
 Databricks Python Wheel dev tasks in a namespaced collection of tasks to enrich the Invoke CLI task runner.
 
-## Getting Started
+---
+
+<!--TOC-->
+
+- [Invoke Databricks Wheel Tasks](#invoke-databricks-wheel-tasks)
+- [Getting Started](#getting-started)
+  - [Databricks CLI Config](#databricks-cli-config)
+    - [Config file](#config-file)
+    - [Environment Variables](#environment-variables)
+  - [Invoke Setup](#invoke-setup)
+- [The Tasks](#the-tasks)
+  - [upload](#upload)
+  - [define-job](#define-job)
+  - [run-job](#run-job)
+- [Contributing](#contributing)
+- [Resources](#resources)
+- [Prior Art](#prior-art)
+
+<!--TOC-->
+
+# Getting Started
 
 ```sh
 pip install invoke-databricks-wheel-tasks
@@ -10,11 +32,15 @@ pip install invoke-databricks-wheel-tasks
 
 This will also install `invoke` and `databricks-cli`.
 
-### Databricks CLI Config
+## Databricks CLI Config
 
 It is assumed you will follow the documentation provided to setup `databricks-cli`.
 
 https://docs.databricks.com/dev-tools/cli/index.html
+
+There are 2 options config file or environment variables.
+
+### Config file
 
 You'll need to setup a Personal Access Token. Then run the following command:
 
@@ -36,25 +62,25 @@ token = dapi0123456789abcdef0123456789abcdef
 jobs-api-version = 2.1
 ```
 
-### Invoke Setup
+### Environment Variables
+
+On some CI systems it is better to export secrets into environment variables rather than have config files with secrets on CI servers.
+
+Export the following and the `databricks-cli` will pick it up:
+
+```ini
+DATABRICKS_HOST=https://myorganisation.cloud.databricks.com/
+DATABRICKS_TOKEN=dapi0123456789abcdef0123456789abcdef
+DATABRICKS_JOBS_API_VERSION="2.1
+```
+
+## Invoke Setup
 
 `tasks.py`
 
 ```python
 from invoke import task
 from invoke_databricks_wheel_tasks import * # noqa
-
-@task
-def format(c):
-    """Autoformat code for code style."""
-    c.run("black .")
-    c.run("isort .")
-
-@task
-def build(c):
-    """Build wheel."""
-    c.run("rm -rfv dist/")
-    c.run("poetry build -f wheel")
 ```
 
 Once your `tasks.py` is setup like this `invoke` will have the extra commands:
@@ -63,51 +89,25 @@ Once your `tasks.py` is setup like this `invoke` will have the extra commands:
 λ invoke --list
 Available tasks:
 
-  build                  Build wheel.
-  clean                  Clean wheel artifact from DBFS.
   dbfs-wheel-path        Generate the target path (including wheelname) this wheel should be uploaded to.
   dbfs-wheel-path-root   Generate the target path (excluding wheelname) this wheel should be uploaded to.
   define-job             Generate templated Job definition and upsert by Job Name in template.
-  format                 Autoformat code for code style.
   poetry-wheel-name      Display the name of the wheel file poetry would build.
-  reinstall              Reinstall version of wheel on cluster with a restart.
-  runjob                 Trigger default job associated for this project.
+  run-job                Trigger default job associated for this project.
   upload                 Upload wheel artifact to DBFS.
 ```
 
-## The Tasks
+# The Tasks
 
-### upload
+## upload
 
 This task will use `dbfs` to empty the upload path and then copy the built wheel from `dist/`.
 This project assumes you're using `poetry` or your wheel build output is located in `dist/`.
 
 If you have other requirements then _pull requests welcome_.
 
-### clean
 
-This tasks will clean up all items on the target `--artifact-path`.
-
-### reinstall
-
-After some trial and error, creating a job which creates a job cluster everytime is roughly 7 minutes.
-
-However if you create an all purpose cluster that you:
- - Mark the old wheel for uninstall
- - restart cluster
- - install updated wheel from dbfs location
- 
- This takes roughly 2 minutes which is a much tighter development loop. So these three steps are what `db.reinstall` performs.
-
-### runjob
-
-Assuming you have defined a job, that uses a pre-existing cluster, that has your latest wheel installed, this will create a manual trigger of your job with `job-id`.
-
-The triggering returns a `run-id`, where this `run-id` gets polled until the state gets to an end state.
-
-Then a call to `databricks runs get-output --run-id` happens to retrieve and `error`, `error_trace` and/or `logs` to be emitted to console.
-
-### define-job
+## define-job
 
 You may want to run `invoke --help define-job` to get the help documentation.
 
@@ -134,6 +134,15 @@ This will then check the list of Jobs in your workspace, see if a job with the s
 **The beauty is that the specifics of `config-file` and `jinja-template` is completely up to you.**
 
 `config-file` is the minimal datastructure you need to configure `jinja-template` and you just use the [Jinja Control Structures](https://jinja.palletsprojects.com/en/3.1.x/templates/#list-of-control-structures) (`if-else`, `for-loop`, etc) to traverse it and populate `jinja-template`.
+
+## run-job
+
+This will create a manual trigger of your job with `job-id`.
+
+The triggering returns a `run-id`, where this `run-id` gets polled until the state gets to an end state.
+
+Then a call to `databricks runs get-output --run-id` happens to retrieve and `error`, `error_trace` and/or `logs` to be emitted to console.
+
 
 
 # Contributing

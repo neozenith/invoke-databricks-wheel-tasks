@@ -1,0 +1,6 @@
+{
+    "name": "{{ name }}",
+    "wheels": [{% for wheel in wheels %}
+        "{{ wheel }}"{{ ", " if not loop.last else "" }}{% endfor %}
+    ]
+}

@@ -5,8 +5,10 @@ orbs:
   python: circleci/python@2.1.1
 
 jobs:
+
   poetry-invoke-lint:
     executor: python/default
+    resource_class: small
     steps:
       - checkout
       - python/install-packages:
@@ -14,9 +16,21 @@ jobs:
       - run:
           name: Style Check and Linting
           command: poetry run inv lint
+      - run:
+          name: Type Checking
+          command: poetry run inv typecheck
 
   poetry-invoke-typecheck:
-    executor: python/default
+    parameters:
+      version:
+        default: '3.10'
+        type: string
+
+    docker:
+      - image:  'cimg/python:<< parameters.version >>'
+      
+    resource_class: small
+    
     steps:
       - checkout
       - python/install-packages:
@@ -25,25 +39,57 @@ jobs:
           name: Type Checking
           command: poetry run inv typecheck
 
+  integration-test:
+    executor: python/default
+    resource_class: small
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+      - run:
+          name: Integration Tests against Databricks Workspace
+          command: poetry run inv integration-test
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: htmlcov/
+          destination: integration-test-coverage-report
+
+
 workflows:
   main:
     jobs:
       - poetry-invoke-lint
-      - poetry-invoke-typecheck
+
+      - poetry-invoke-typecheck:
+          # Typecheck across versions as backwards compatibility can be sketchy if not implemented correctly
+          name: "Typecheck << matrix.version >>"
+          matrix: 
+            parameters:
+              version: ["3.10", "3.9", "3.8"]
+
       - python/test:
-          name: "Test 3.8"
-          version: "3.8"
-          requires: ["poetry-invoke-lint", "poetry-invoke-typecheck"]
+          # Test most recent version first
+          name: "Test Latest (3.10)"
+          version: "3.10"
+          requires: ["poetry-invoke-lint", "Typecheck 3.10"]
+
       - python/test:
+          # Test older compatable versions last.
           name: Test << matrix.version >>
           # It's not worth testing on other interpreters if the baseline one
           # failed. Can't run >4 jobs at a time anyhow!
-          requires: ["Test 3.8"]
+          requires: ["Test Latest (3.10)"]
           matrix:
             parameters:
-              version: ["3.9", "3.10"]
+              version: ["3.9", "3.8"]
+
+      - integration-test:
+          name: "Databricks Workspace Integration Tests"
+          requires: ["Test 3.8", "Test 3.9"]
+
 
 # TODO: 
-# - coverage reporting
-# - Docs
-# - Deploy on main branch tagged
+# Export test report
+# Export coverage report
+# - Build Docs

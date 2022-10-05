@@ -10,7 +10,21 @@ from invoke_databricks_wheel_tasks import *  # noqa
 # https://github.com/pyinvoke/invoke/issues/357
 
 
-@task(pre=[build, upload, reinstall, runjob], default=True)  # noqa
-def dev(c):
-    """Default databricks flow."""
-    ...
+@task
+def integration_test(c):
+    """Run pytest with integration tests that use a test Databricks workspace."""
+    # Run normal unit tests and append integration test coverage.
+    c.run("python3 -m pytest")
+
+    # NOTE: Can not run poetry as a subprocess within a running pytest process that is also using subprocess coverage checking. It interferes in unsupported ways.
+    with c.cd("tests/example_databricks_project"):
+        c.run("poetry -vvv build -f wheel --no-ansi")
+
+    c.run("python3 -m pytest -m integration --cov-append")
+
+
+@task
+def docs(c):
+    """Automate documentation tasks."""
+    c.run("md_toc --in-place github --header-levels 4 README.md")
+    # TODO: Add Sphinx docs generation here too.

@@ -1,0 +1,7 @@
+{
+  "name": "json-conf",
+  "wheels": [
+    "{{ UTIL_WHEEL }}",
+    "path/to/my/main/wheel"
+  ]
+}
