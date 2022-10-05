@@ -1,8 +1,8 @@
 # Standard Library
 import json
-
-# import os
+import os
 import shutil
+import subprocess
 from pathlib import Path
 from typing import Tuple
 
@@ -27,13 +27,16 @@ def example_wheel() -> Tuple[Path, str]:
     source_path = Path("./tests/example_databricks_project/")
     dist_path = source_path / "dist"
 
-    shutil.rmtree(dist_path, ignore_errors=True)
-    with c.cd(source_path):
-        c.run("ls -laFGh")
-        # c.run("poetry build -f wheel")
+    
+    result = subprocess.run("poetry build -f wheel", cwd=str(source_path), shell=True, capture_output=True)
+    print(result)
+    print(result.stdout.decode('utf-8'))        
 
-    wheel_name = ""  # [w for x in os.walk(source_path) for w in x[2] if w.endswith(".whl")][0]
-    return (dist_path, wheel_name)
+    wheel_name = [w for x in os.walk(source_path) for w in x[2] if w.endswith(".whl")][0]
+    yield (dist_path, wheel_name)
+
+    # Teardown
+    shutil.rmtree(dist_path, ignore_errors=True)
 
 
 @pytest.fixture(scope="function")
@@ -104,8 +107,6 @@ def test_create_job(databricks_test_workspace: None, uploaded_wheel_path: Tuple[
 
     conf = load_config(str(config_path), environment_variables)
     job_json_string = merge_template(str(template_path), conf)
-    print("JSON JOB STRING")
-    print(job_json_string)
     job_definition = json.loads(job_json_string)
     existing_jobs = list_jobs()
     assert job_definition["name"] not in existing_jobs.keys()
