@@ -174,7 +174,6 @@ python-versions = "*"
 [package.source]
 type = "url"
 url = "https://github.com/neozenith/invoke/archive/deprecate-python2.zip"
-
 [[package]]
 name = "invoke-common-tasks"
 version = "0.3.2"
@@ -504,7 +503,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "types-invoke"
-version = "1.7.3"
+version = "1.7.3.1"
 description = "Typing stubs for invoke"
 category = "dev"
 optional = false
