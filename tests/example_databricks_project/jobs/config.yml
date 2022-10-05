@@ -1,0 +1,29 @@
+name: invoke_databricks_wheel_tasks_example_job
+tasks:
+  # Bronze Layer Tasks
+  - name: bronze_task
+    wheels:
+      - {{ bronze_wheel }}
+    package_name: {{ bronze_package }}
+    parameters:
+      required-string-value: bronze
+
+  # Silver Layer Tasks
+  - name: silver_task
+    wheels:
+      - {{ silver_wheel }}
+    package_name: {{ silver_package }}
+    parameters:
+      required-string-value: silver
+    depends:
+      - bronze_task
+
+    # Gold Layer Tasks
+  - name: gold_task
+    wheels:
+      - {{ gold_wheel }}
+    package_name: {{ gold_package }}
+    parameters:
+      required-string-value: gold
+    depends:
+      - silver_task

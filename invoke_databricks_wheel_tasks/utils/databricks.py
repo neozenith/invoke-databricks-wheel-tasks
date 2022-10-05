@@ -93,21 +93,9 @@ def wait_for_run_status(
             # print(url)
 
         current_status = run_status["state"]["life_cycle_state"]
-        # print(current_status)
         if current_status in failure_status:
             raise ValueError(f"Run entered failed state {current_status}... aborting.")
 
         time.sleep(POLL_DELAY)
 
-    # TODO: convert to logger output
     pp(run_status["state"])
-    # print(url)
-    # result = c.run(f"databricks {profile_flag} runs get-output --run-id {run_id}", hide=True)
-    # output = json.loads(result.stdout)
-
-    # TODO: show error output
-
-    # for k in ["error", "error_trace", "logs"]:
-    #     if k in output:
-    #         print(f"\n========{k.upper()}======\n")
-    #         print("\n".join(output[k].split("\\n")))

@@ -1,0 +1,64 @@
+{
+    "name": "{{ name }}",
+    "email_notifications": {
+        "no_alert_for_skipped_runs": false
+    },
+    "timeout_seconds": 0,
+    "max_concurrent_runs": 1,
+    "tasks": [{% for task in tasks %}
+        {
+            "task_key": "{{ task.name }}",
+
+            {% if task.depends is defined %}
+            "depends_on": [
+                {% for dependency in task.depends %}
+                {
+                    "task_key": "{{ dependency }}"
+                }{{ ", " if not loop.last else "" }}
+                {% endfor %}
+            ],
+            {% endif %}
+            
+            "libraries": [{% for wheel in task.wheels %}
+                { "whl": "{{ wheel }}" }{{ ", " if not loop.last else "" }}{% endfor %}
+            ],
+            "python_wheel_task": {
+                "package_name": "{{ task.package_name }}",
+                "entry_point": "main",
+                "named_parameters": { {% if task.parameters is defined %}{% for param_key, param_val in task.parameters.items() %}
+                        "{{ param_key }}": "{{param_val}}"{{ ", " if not loop.last else "" }}{% endfor %}{% endif %}
+                }
+            },
+            "job_cluster_key": "{{ name }}_job_cluster"
+        }{{ ", " if not loop.last else "" }}{% endfor %}
+    ],
+    "job_clusters": [
+        {
+            "job_cluster_key": "{{ name }}_job_cluster",
+            "new_cluster": {
+                "cluster_name": "",
+                "spark_version": "11.2.x-scala2.12",
+                "spark_conf": {
+                    "spark.master": "local[*, 4]",
+                    "spark.databricks.cluster.profile": "singleNode"
+                },
+                "aws_attributes": {
+                    "first_on_demand": 1,
+                    "availability": "SPOT_WITH_FALLBACK",
+                    "zone_id": "ap-southeast-2b",
+                    "spot_bid_price_percent": 100
+                },
+                "node_type_id": "m5d.large",
+                "driver_node_type_id": "m5d.large",
+                "custom_tags": {
+                    "ResourceClass": "SingleNode"
+                },
+                "enable_elastic_disk": true,
+                "data_security_mode": "SINGLE_USER",
+                "runtime_engine": "STANDARD",
+                "num_workers": 0
+            }
+        }
+    ],
+    "format": "MULTI_TASK"
+}

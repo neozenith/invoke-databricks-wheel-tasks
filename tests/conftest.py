@@ -31,7 +31,7 @@ def databricks_test_workspace(monkeypatch):
     try:
         monkeypatch.setenv("DATABRICKS_HOST", os.environ["TEST_FIXTURE_DATABRICKS_HOST"])
         monkeypatch.setenv("DATABRICKS_TOKEN", os.environ["TEST_FIXTURE_DATABRICKS_TOKEN"])
-        monkeypatch.setenv("DATABRICKS_JOB_API_VERSION", os.environ["TEST_FIXTURE_DATABRICKS_JOBS_API_VERSION"])
+        monkeypatch.setenv("DATABRICKS_JOBS_API_VERSION", os.environ["TEST_FIXTURE_DATABRICKS_JOBS_API_VERSION"])
     except KeyError as k:
         error_message = """
         If you are here because of a failing test suite then you need to either:
