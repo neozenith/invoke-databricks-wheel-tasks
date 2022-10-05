@@ -1,6 +1,7 @@
 # Standard Library
 import json
-import os
+
+# import os
 import shutil
 from pathlib import Path
 from typing import Tuple
@@ -29,9 +30,9 @@ def example_wheel() -> Tuple[Path, str]:
     shutil.rmtree(dist_path, ignore_errors=True)
     with c.cd(source_path):
         c.run("ls -laFGh")
-        c.run("poetry build -f wheel")
+        # c.run("poetry build -f wheel")
 
-    wheel_name = [w for x in os.walk(source_path) for w in x[2] if w.endswith(".whl")][0]
+    wheel_name = ""  # [w for x in os.walk(source_path) for w in x[2] if w.endswith(".whl")][0]
     return (dist_path, wheel_name)
 
 
@@ -103,6 +104,8 @@ def test_create_job(databricks_test_workspace: None, uploaded_wheel_path: Tuple[
 
     conf = load_config(str(config_path), environment_variables)
     job_json_string = merge_template(str(template_path), conf)
+    print("JSON JOB STRING")
+    print(job_json_string)
     job_definition = json.loads(job_json_string)
     existing_jobs = list_jobs()
     assert job_definition["name"] not in existing_jobs.keys()
