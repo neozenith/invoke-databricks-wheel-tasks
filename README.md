@@ -1,6 +1,10 @@
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/neozenith/invoke-databricks-wheel-tasks/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/neozenith/invoke-databricks-wheel-tasks/tree/main)
+
 # Invoke Databricks Wheel Tasks
 
 Databricks Python Wheel dev tasks in a namespaced collection of tasks to enrich the Invoke CLI task runner.
+
+---
 
 <!--TOC-->
 

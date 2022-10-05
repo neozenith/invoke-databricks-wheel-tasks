@@ -2,7 +2,6 @@
 import json
 import os
 import shutil
-import subprocess
 from pathlib import Path
 from typing import Tuple
 
@@ -20,25 +19,31 @@ from invoke_databricks_wheel_tasks.utils.databricks import (
 from invoke_databricks_wheel_tasks.utils.misc import load_config, merge_template
 
 
-@pytest.fixture(scope="function")
-def example_wheel() -> Tuple[Path, str]:
-    """Build a minimal example wheel for simulating an integration test."""
+class IntegrationFixtureError(Exception):
+    ...
+
+
+@pytest.fixture(scope="session")
+def example_wheel() -> Tuple[Path, str]:  # pragma: no cover
+    """Build a minimal example wheel for simulating an integration test.
+
+    NOTE: Can NOT run poetry as a subprocess within a running pytest process that is also using subprocess coverage checking.
+    It interferes in unsupported ways.
+    """
     source_path = Path("./tests/example_databricks_project/")
     dist_path = source_path / "dist"
 
-    result = subprocess.run("poetry --version", cwd=str(source_path), shell=True, capture_output=True)
-    print(result)
-    print(result.stdout.decode("utf-8"))
-
-    result = subprocess.run("ls -la", cwd=str(source_path), shell=True, capture_output=True)
-    print(result)
-    print(result.stdout.decode("utf-8"))
-
-    result = subprocess.run("poetry build -f wheel", cwd=str(source_path), shell=True, capture_output=True)
-    print(result)
-    print(result.stdout.decode("utf-8"))
-
-    wheel_name = [w for x in os.walk(source_path) for w in x[2] if w.endswith(".whl")][0]
+    candidate_names = [w for x in os.walk(source_path) for w in x[2] if w.endswith(".whl")]
+    if len(candidate_names) >= 1:
+        wheel_name = candidate_names[0]
+    else:
+        raise IntegrationFixtureError(
+            f"""
+        If you are here because of a failing test suite then you need to build the example wheel in {str(source_path)}.
+        In particular you should build it in tasks.py using a command like:
+        cd {str(source_path)} && poetry -vvv build -f wheel --no-ansi
+        """
+        )
     yield (dist_path, wheel_name)
 
     # Teardown
