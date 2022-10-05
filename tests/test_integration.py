@@ -26,7 +26,7 @@ def example_wheel() -> Tuple[Path, str]:
     source_path = Path("./tests/example_databricks_project/")
     dist_path = source_path / "dist"
 
-    shutil.rmtree(dist_path)
+    shutil.rmtree(dist_path, ignore_errors=True)
     with c.cd(source_path):
         c.run("poetry build -f wheel", hide=True)
 
