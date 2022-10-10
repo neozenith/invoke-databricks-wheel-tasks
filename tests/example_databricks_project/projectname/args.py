@@ -1,7 +1,27 @@
 """Arguments parsing."""
 # Standard Library
-from argparse import ArgumentParser
+from argparse import ArgumentParser, ArgumentTypeError
 from typing import List
+
+
+def cli_bool(bool_string):
+    """Custom argpase type handler to convert booleanish strings to booleans.
+
+    For more details about custom argparse types see below:
+    https://docs.python.org/3/library/argparse.html#type
+    """
+    b = bool_string.lower()
+    truthy = ["1", "t", "true", "y", "yes", "on"]
+    falsey = ["0", "f", "false", "n", "no", "off"]
+
+    if b in truthy:
+        return True
+    elif b in falsey:
+        return False
+    else:
+        raise ArgumentTypeError(
+            f"Unexpected value '{bool_string}', it was not in the lists of known truthy/falsey values: {truthy} or {falsey}"
+        )
 
 
 def parse_args(args: List[str]) -> dict:
@@ -14,7 +34,7 @@ def parse_args(args: List[str]) -> dict:
     valid_args = {
         "required_string_value": {"required": True},
         "optional_error_message_value": "",
-        "should_throw_test_error": {"default": False, "type": bool},
+        "should_throw_test_error": {"default": "False", "type": cli_bool},
     }
 
     parser = _arg_parse_builder(valid_args)
