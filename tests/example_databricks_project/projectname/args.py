@@ -19,7 +19,10 @@ def cli_bool(bool_string):
     elif b in falsey:
         return False
     else:
-        raise ArgumentTypeError(f"Unexpected value '{bool_string}', it was not in the lists of known truthy/falsey values: {truthy} or {falsey}")
+        raise ArgumentTypeError(
+            f"Unexpected value '{bool_string}', it was not in the lists of known truthy/falsey values: {truthy} or {falsey}"
+        )
+
 
 def parse_args(args: List[str]) -> dict:
     """Parse arguments in a structured way.
